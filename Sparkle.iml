@@ -14,24 +14,24 @@
     <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
-          <root url="file://$USER_HOME$/Downloads/spark-dependencies_0.9.9.3_and_newer" />
+          <root url="file://$MODULE_DIR$/spark-0.9.9.4-SNAPSHOT" />
         </CLASSES>
         <JAVADOC />
-        <SOURCES />
-        <jarDirectory url="file://$USER_HOME$/Downloads/spark-dependencies_0.9.9.3_and_newer" recursive="false" />
+        <SOURCES>
+          <root url="file://$MODULE_DIR$/spark-0.9.9.4-SNAPSHOT" />
+        </SOURCES>
+        <jarDirectory url="file://$MODULE_DIR$/spark-0.9.9.4-SNAPSHOT" recursive="false" />
+        <jarDirectory url="file://$MODULE_DIR$/spark-0.9.9.4-SNAPSHOT" recursive="false" type="SOURCES" />
       </library>
     </orderEntry>
     <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
-          <root url="file://$USER_HOME$/Downloads/spark-0.9.9.4-SNAPSHOT" />
+          <root url="file://$MODULE_DIR$/spark-dependencies_0.9.9.3_and_newer" />
         </CLASSES>
         <JAVADOC />
-        <SOURCES>
-          <root url="file://$USER_HOME$/Downloads/spark-0.9.9.4-SNAPSHOT" />
-        </SOURCES>
-        <jarDirectory url="file://$USER_HOME$/Downloads/spark-0.9.9.4-SNAPSHOT" recursive="false" />
-        <jarDirectory url="file://$USER_HOME$/Downloads/spark-0.9.9.4-SNAPSHOT" recursive="false" type="SOURCES" />
+        <SOURCES />
+        <jarDirectory url="file://$MODULE_DIR$/spark-dependencies_0.9.9.3_and_newer" recursive="false" />
       </library>
     </orderEntry>
   </component>
