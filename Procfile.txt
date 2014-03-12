@@ -1,1 +1,1 @@
-java -cp spark-dependencies_0.9.9.3_and_newer/*:spark-0.9.4-SNAPSHOT/*:target/classes/ HelloSpark
+web:	java -cp spark-dependencies_0.9.9.3_and_newer/*:spark-0.9.4-SNAPSHOT/*:target/classes/ HelloSpark
