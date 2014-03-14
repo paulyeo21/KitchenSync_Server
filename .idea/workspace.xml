@@ -64,10 +64,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="HelloSpark.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="HelloSpark.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/HelloSpark.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="17" column="51" selection-start="500" selection-end="500" vertical-scroll-proportion="0.52816904" vertical-offset="30" max-vertical-offset="2565">
+            <state line="17" column="51" selection-start="500" selection-end="500" vertical-scroll-proportion="0.0" vertical-offset="570" max-vertical-offset="2565">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -75,10 +75,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="pom.xml" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="pom.xml" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="27" column="21" selection-start="962" selection-end="962" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1005">
+            <state line="61" column="10" selection-start="2153" selection-end="2153" vertical-scroll-proportion="0.79498863" vertical-offset="566" max-vertical-offset="1005">
               <folding />
             </state>
           </provider>
@@ -213,10 +213,6 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="Sparkle" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="External Libraries" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
@@ -609,7 +605,7 @@
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.29431438" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32917467" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32917467" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18234165" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -842,19 +838,19 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="27" column="21" selection-start="962" selection-end="962" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1005">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/HelloSpark.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="51" selection-start="500" selection-end="500" vertical-scroll-proportion="0.52816904" vertical-offset="30" max-vertical-offset="2565">
+        <state line="17" column="51" selection-start="500" selection-end="500" vertical-scroll-proportion="0.0" vertical-offset="570" max-vertical-offset="2565">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="61" column="10" selection-start="2153" selection-end="2153" vertical-scroll-proportion="0.79498863" vertical-offset="566" max-vertical-offset="1005">
+          <folding />
         </state>
       </provider>
     </entry>
