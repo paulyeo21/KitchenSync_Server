@@ -1,11 +1,12 @@
-import static spark.Spark.*;
-
 import spark.Request;
 import spark.Response;
 import spark.Route;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+
+import static spark.Spark.get;
+import static spark.Spark.post;
 
 public class HelloSpark {
     public static Deque<Article> articles = new ArrayDeque<Article>();
@@ -14,7 +15,7 @@ public class HelloSpark {
         get(new Route("/") {
             @Override
             public Object handle(Request request, Response response) {
-                String title = "My Blog";
+                String title = "Kitchen Sync Sample Blog";
                 String createArticleLink = "<a href='/article/create'>Write Article</a>";
                 StringBuilder html = new StringBuilder();
 
