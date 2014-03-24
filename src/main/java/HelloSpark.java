@@ -85,8 +85,6 @@ import static spark.Spark.post;
 //}
 
 
-
-
 public class HelloSpark {
     public static Deque<Article> articles = new ArrayDeque<Article>();
 
