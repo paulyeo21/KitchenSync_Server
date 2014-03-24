@@ -240,5 +240,7 @@ public class HelloSpark {
                 return "";
             }
         });
+
+//        org.apache.log4j.BasicConfigurator.configure();
     }
 }
