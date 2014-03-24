@@ -8,6 +8,85 @@ import java.util.Deque;
 import static spark.Spark.get;
 import static spark.Spark.post;
 
+//public class HelloSpark {
+//    // Just store POST data within a ArrayList for now
+//    public static ArrayList<String> things = new ArrayList<String>();
+////    public static Document doc;
+//
+//    public static void main(String[] args) {
+//
+//        get(new Route("/hello") {
+//            @Override
+//            public Object handle(Request request, Response response) {
+////                response.type("text/json");
+//                return "Hello Spark.";
+//            }
+//        });
+//        get(new Route("/hello.xml") {
+//            @Override
+//            public Object handle(Request request, Response response) {
+//                Document doc;
+//                String title = "";
+//
+//                try {
+//                    doc = Jsoup.connect("http://http://macalester.cafebonappetit.com/hungry/cafe-mac/").get();
+//                    title = doc.title();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//
+//                return doc;
+//
+////                JSONObject obj = new JSONObject();
+////                obj.put("name", "hello world.");
+////                response.type("text/json");
+////                return obj;
+//            }
+//        });
+//        get(new Route("/goodbye") {
+//            @Override
+//            public Object handle(Request request, Response response) {
+//                return "Goodbye Spark MVC Framework";
+//            }
+//        });
+//        get(new Route("/parameter/:param") {
+//            @Override
+//            public Object handle(Request request, Response response) {
+//                StringBuffer myParam = new StringBuffer(request.params(":param"));
+//                return "I reversed your param for ya \"" + myParam.reverse() + "\"";
+//            }
+//        });
+//        get(new Route("/list") {
+//            @Override
+//            public Object handle(Request request, Response response) {
+//                StringBuilder html = new StringBuilder();
+//
+//                if (HelloSpark.things.isEmpty()) {
+//                    html.append("<b>Try adding some things to your list</b>");
+//                } else {
+//                    html.append("<ul>");
+//                    for (String thing : HelloSpark.things) {
+//                        html.append("<li>").append(thing).append("</p>");
+//                    }
+//                    html.append("</ul>");
+//                }
+//                return html.toString();
+//            }
+//        });
+//        post(new Route("/add/:item") {
+//            @Override
+//            public Object handle(Request request, Response response) {
+//                HelloSpark.things.add(request.params(":item"));
+//                response.status(200);
+//                return response;
+//            }
+//        });
+//    }
+//}
+
+
+
+
 public class HelloSpark {
     public static Deque<Article> articles = new ArrayDeque<Article>();
 
@@ -94,6 +173,7 @@ public class HelloSpark {
                         break;
                     }
                 }
+//                response.type("article/read/:id/json");
                 return html.toString();
             }
         });
