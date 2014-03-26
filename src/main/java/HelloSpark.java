@@ -23,7 +23,7 @@ public class HelloSpark {
     public static ArrayList<String> things = new ArrayList<String>();
 
     public static void main(String[] args) {
-//        setPort(Integer.parseInt(System.getenv("PORT"))); // for heroku deployment, comment for local host
+        setPort(Integer.parseInt(System.getenv("PORT"))); // for heroku deployment, comment for local host
 
         get(new Route("/") {
             @Override
