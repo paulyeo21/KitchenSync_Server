@@ -1,17 +1,22 @@
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 import spark.Request;
 import spark.Response;
 import spark.Route;
 
+import java.io.IOException;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
 
-import static spark.Spark.get;
-import static spark.Spark.post;
+import static spark.Spark.*;
+import spark.*;
 
 //public class HelloSpark {
 //    // Just store POST data within a ArrayList for now
 //    public static ArrayList<String> things = new ArrayList<String>();
-////    public static Document doc;
+//    public static Document doc;
 //
 //    public static void main(String[] args) {
 //
@@ -25,17 +30,19 @@ import static spark.Spark.post;
 //        get(new Route("/hello.xml") {
 //            @Override
 //            public Object handle(Request request, Response response) {
-//                Document doc;
+//
 //                String title = "";
+//                Elements dayData = null;
 //
 //                try {
-//                    doc = Jsoup.connect("http://http://macalester.cafebonappetit.com/hungry/cafe-mac/").get();
+//                    doc = Jsoup.connect("http://macalester.cafebonappetit.com/hungry/cafe-mac/").get();
+//                    dayData = doc.getElementsByClass("eni-menu-day");
 //                    title = doc.title();
 //                } catch (IOException e) {
 //                    e.printStackTrace();
 //                }
-//
-//                return doc;
+////                response.type("text/xml");
+//                return dayData;
 //
 ////                JSONObject obj = new JSONObject();
 ////                obj.put("name", "hello world.");
@@ -89,6 +96,8 @@ public class HelloSpark {
     public static Deque<Article> articles = new ArrayDeque<Article>();
 
     public static void main(String[] args) {
+        setPort(Integer.parseInt(System.getenv("PORT")));
+
         get(new Route("/") {
             @Override
             public Object handle(Request request, Response response) {
