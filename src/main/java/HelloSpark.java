@@ -27,7 +27,7 @@ public class HelloSpark {
     public static String string = null;
 
     public static void main(String[] args) {
-//        setPort(Integer.parseInt(System.getenv("PORT"))); // for heroku deployment, comment for local host
+        setPort(Integer.parseInt(System.getenv("PORT"))); // for heroku deployment, comment for local host
 
         try {
             doc = Jsoup.connect(url).get();
