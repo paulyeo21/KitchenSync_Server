@@ -1,8 +1,10 @@
+import com.google.gson.Gson;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.parser.Parser;
 import org.jsoup.select.Elements;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -19,24 +21,31 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 public class HelloSpark {
-    // Just store POST data within a ArrayList for now
-    public static ArrayList<String> things = new ArrayList<String>();
+
+    public static final String url = "http://macalester.cafebonappetit.com/hungry/cafe-mac/";
+    public static Document doc = null;
+    public static String string = null;
 
     public static void main(String[] args) {
-        setPort(Integer.parseInt(System.getenv("PORT"))); // for heroku deployment, comment for local host
+//        setPort(Integer.parseInt(System.getenv("PORT"))); // for heroku deployment, comment for local host
+
+        try {
+            doc = Jsoup.connect(url).get();
+            Week week = new Week(doc);
+            Gson gson = new Gson();
+            string = gson.toJson(week);
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         get(new Route("/") {
             @Override
             public Object handle(Request request, Response response) {
-                Document doc = null;
-
-                try {
-                    doc = Jsoup.connect("http://macalester.cafebonappetit.com/hungry/cafe-mac/").get();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                response.type("text/plain");
-                return doc;
+                response.type("text/json");
+                return string;
+//                return doc.select("tbody > *");
 
 //                JSONObject obj = new JSONObject();
 //                obj.put("name", "hello world.");
@@ -44,6 +53,15 @@ public class HelloSpark {
 //                return obj;
             }
         });
+
+        get(new Route("/menu") {
+            @Override
+            public Object handle(Request request, Response response) {
+                Elements dayData = doc.getElementsByClass("eni-menu-item-name");
+                response.type("text/plain");
+                return dayData;
+            }
+         });
     }
 }
 
