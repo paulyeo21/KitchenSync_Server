@@ -1,4 +1,5 @@
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.parser.Parser;
@@ -22,46 +23,38 @@ import javax.xml.parsers.ParserConfigurationException;
 
 public class HelloSpark {
 
-    public static final String url = "http://macalester.cafebonappetit.com/hungry/cafe-mac/";
-    public static Document doc = null;
     public static String string = null;
 
     public static void main(String[] args) {
-        setPort(Integer.parseInt(System.getenv("PORT"))); // for heroku deployment, comment for local host
+        final String url = "http://macalester.cafebonappetit.com/hungry/cafe-mac/";
+
+        // for heroku deployment, comment for local host
+        if(System.getenv("PORT") != null)
+            setPort(Integer.parseInt(System.getenv("PORT")));
 
         try {
-            doc = Jsoup.connect(url).get();
+            Document doc = Jsoup.connect(url).get();
             Week week = new Week(doc);
-            Gson gson = new Gson();
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
             string = gson.toJson(week);
-
 
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        get(new Route("/") {
+        before(new Filter() {
             @Override
-            public Object handle(Request request, Response response) {
-                response.type("text/json");
-                return string;
-//                return doc.select("tbody > *");
-
-//                JSONObject obj = new JSONObject();
-//                obj.put("name", "hello world.");
-//                response.type("text/json");
-//                return obj;
+            public void handle(Request req, Response res) {
+                res.type("application/json");
             }
         });
 
-        get(new Route("/menu") {
+        get(new Route("/") {
             @Override
             public Object handle(Request request, Response response) {
-                Elements dayData = doc.getElementsByClass("eni-menu-item-name");
-                response.type("text/plain");
-                return dayData;
+                return string;
             }
-         });
+        });
     }
 }
 
