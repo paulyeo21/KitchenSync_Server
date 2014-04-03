@@ -48,7 +48,7 @@ public class Meal {
                 currentStation = new Station(stationName);
                 stations.add(currentStation);
             } else if (item.hasClass("price-")) {
-                MenuItem food = new MenuItem(item);
+                Food food = new Food(item);
                 currentStation.addMenuItem(food);
             }
         }
@@ -58,10 +58,10 @@ public class Meal {
      * Returns all menu items in served during a meal
      * @return all the menu items at a meal
      */
-    public ArrayList<MenuItem> getMenuItems(){
-        ArrayList<MenuItem> items = new ArrayList<MenuItem>();
+    public ArrayList<Food> getMenuItems(){
+        ArrayList<Food> items = new ArrayList<Food>();
         for (Station station : stations)
-            items.addAll(station.getMenuItems());
+            items.addAll(station.getFoods());
         return items;
     }
 
