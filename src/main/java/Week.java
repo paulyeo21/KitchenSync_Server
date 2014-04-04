@@ -23,9 +23,6 @@ public class Week {
         makeDays(dayData);
     }
 
-    public Week(){
-    }
-
     public Day[] getDays(){
         return days;
     }
