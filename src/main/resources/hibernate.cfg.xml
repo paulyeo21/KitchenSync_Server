@@ -10,7 +10,7 @@
         <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
         <!--<property name="hibernate.connection.username">rowkkrvzwmwgba</property>-->
         <!--<property name="connection.password">hIK6uTRcIX-xMNSVZMZweXKLGK</property>-->
-        <property name="hibernate.connection.url">jdbc:postgres://ec2-50-16-201-126.compute-1.amazonaws.com:5432/d1f5vcb8rqtqob?username=rowkkrvzwmwgba&password=hIK6uTRcIX-xMNSVZMZweXKLGK</property>
+        <property name="hibernate.connection.url">jdbc:postgres://ec2-50-16-201-126.compute-1.amazonaws.com:5432/d1f5vcb8rqtqob?username=rowkkrvzwmwgba&amp;password=hIK6uTRcIX-xMNSVZMZweXKLGK</property>
 
         <property name="connection_pool_size">1</property>
 
