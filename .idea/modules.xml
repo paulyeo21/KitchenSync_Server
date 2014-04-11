@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Sparkle.iml" filepath="$PROJECT_DIR$/Sparkle.iml" />
+      <module fileurl="file://$PROJECT_DIR$/KitchenSyncServer.iml" filepath="$PROJECT_DIR$/KitchenSyncServer.iml" />
     </modules>
   </component>
 </project>

@@ -62,8 +62,4 @@ public class Week {
         }
         return menu;
     }
-
-//    public String toJson(){
-//
-//    }
 }
