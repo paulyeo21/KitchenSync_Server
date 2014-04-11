@@ -1,1 +1,1 @@
-Hi, my name is Paul Yeo. This is a repository for a spark tutorial from http://www.taywils.me/2013/11/05/javasparkframeworktutorial.html.
+Spring Macalester 2014. COMP 225. This repository holds the server-side code for our android mobile application KitchenSync. 
