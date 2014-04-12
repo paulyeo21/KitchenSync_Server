@@ -55,8 +55,8 @@ public class CafeMacParser {
 
     private static SessionFactory createSessionFactory() {
         Configuration configuration = new Configuration().configure();
-        if(System.getenv("DATABASE_URL") != null)
-            configuration.setProperty("hibernate.connection.url", System.getenv("DATABASE_URL"));
+//        if(System.getenv("DATABASE_URL") != null)
+//            configuration.setProperty("hibernate.connection.url", System.getenv("DATABASE_URL"));
         return configuration.buildSessionFactory(
                 new StandardServiceRegistryBuilder()
                         .applySettings(configuration.getProperties())
