@@ -29,7 +29,7 @@ public class CafeMacParser {
         try {
             doc = Jsoup.connect(url).get();
         } catch (IOException e) {
-            e.printStackTrace();
+            //TODO Handle this error by emailing someone
         }
         return new Week(doc);
     }
@@ -43,6 +43,7 @@ public class CafeMacParser {
         Transaction tx = session.beginTransaction();
 
 //        Delete previous rows from db tables
+//        TODO It would be nice to check if the week is null before it gets saved
         String delete = "DELETE FROM CachedServerResponse";
         Query query = session.createQuery(delete);
         query.executeUpdate();
