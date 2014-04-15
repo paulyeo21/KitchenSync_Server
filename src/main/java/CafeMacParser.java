@@ -20,7 +20,7 @@ import com.google.gson.GsonBuilder;
  */
 public class CafeMacParser {
 
-    private static final String CAFE_MAC_URL = "http://macalester.cafebonappetit.com/hungry/cafe-mac/";
+    private static final String CAFE_MAC_URL = "http://macalester.cafebonappetit.com/hungry/cafe-mac";
     private static SessionFactory sessionFactory = createSessionFactory();
     private static Gson gson = new Gson();
 
@@ -36,22 +36,24 @@ public class CafeMacParser {
 
     public static void main (String[] args) {
         Week week = new CafeMacParser().parse(CAFE_MAC_URL);
-        String jsonMenu = gson.toJson(week);
-        CachedServerResponse menu = new CachedServerResponse();
+    //        Check if the week is null before it gets saved
+        if (!week.isEmpty()) {
+            String jsonMenu = gson.toJson(week);
+            CachedServerResponse menu = new CachedServerResponse();
 
-        Session session = sessionFactory.openSession();
-        Transaction tx = session.beginTransaction();
+            Session session = sessionFactory.openSession();
+            Transaction tx = session.beginTransaction();
 
-//        Delete previous rows from db tables
-//        TODO It would be nice to check if the week is null before it gets saved
-        String delete = "DELETE FROM CachedServerResponse";
-        Query query = session.createQuery(delete);
-        query.executeUpdate();
+    //        Delete previous rows from db tables
+            String delete = "DELETE FROM CachedServerResponse";
+            Query query = session.createQuery(delete);
+            query.executeUpdate();
 
-        menu.setMenu(jsonMenu);
-        menu.setCreatedAt(new Date());
-        session.save(menu);
-        tx.commit();
+            menu.setMenu(jsonMenu);
+            menu.setCreatedAt(new Date());
+            session.save(menu);
+            tx.commit();
+        }
     }
 
     private static SessionFactory createSessionFactory() {

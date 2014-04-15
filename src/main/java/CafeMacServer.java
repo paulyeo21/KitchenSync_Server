@@ -1,6 +1,7 @@
 import static spark.Spark.*;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.hibernate.*;
 import org.hibernate.Session;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -15,6 +16,7 @@ import java.util.Map;
 public class CafeMacServer {
 
     private static SessionFactory sessionFactory = createSessionFactory();
+    private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     public static void main(String[] args) {
 
@@ -52,8 +54,8 @@ public class CafeMacServer {
                         errors.put(violation.getPropertyPath().toString(), violation.getMessage());
                     }
                     responseBody.put("validationErrors", errors);
-
-                    return responseBody;
+                    String resBody = gson.toJson(responseBody);
+                    return resBody;
 
                 } catch (Exception e) {
 
@@ -65,8 +67,9 @@ public class CafeMacServer {
                     responseBody.put("success", false);
                     responseBody.put("error", e.getLocalizedMessage());
                     responseBody.put("For more information", "http://macalester.cafebonappetit.com/" +
-                            "hungry/cafe-mac/http://macalester.cafebonappetit.com/hungry/cafe-mac/");
-                    return responseBody;
+                            "hungry/cafe-mac/");
+                    String resBody = gson.toJson(responseBody);
+                    return resBody;
                 }
             }
         });

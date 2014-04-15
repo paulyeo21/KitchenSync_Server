@@ -62,4 +62,13 @@ public class Week {
         }
         return menu;
     }
+
+    // Check if days array is all null
+    public boolean isEmpty(){
+        boolean flag = true;
+        for (Day day: days){
+            if (day != null) flag = false;
+        }
+        return flag;
+    }
 }
