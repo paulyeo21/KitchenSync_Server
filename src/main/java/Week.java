@@ -10,6 +10,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class Week {
@@ -20,7 +21,22 @@ public class Week {
      */
     public Week(Document doc){
         Elements dayData = doc.getElementsByClass("eni-menu-day");
-        makeDays(dayData);
+        // Days of week start with 0 on Sunday
+        for (Element dayMenu : dayData){
+            String dayOfWeek = dayMenu.className();
+            String date =
+                    dayOfWeek = dayOfWeek.substring(dayOfWeek.length() -1);
+            days[Integer.parseInt(dayOfWeek)] = new Day(dayMenu);
+        }
+        Calendar calendar = Calendar.getInstance();
+        calendar.setFirstDayOfWeek(Calendar.SUNDAY);
+        int today = calendar.get(Calendar.DAY_OF_WEEK);
+        calendar.add(Calendar.DATE, -today);
+        for(int i=0; i<7; i++){
+            calendar.add(Calendar.DATE, 1);
+            if (days[i] != null)
+                days[i].setDate(calendar.getTime());
+        }
     }
 
     public Day[] getDays(){
@@ -29,19 +45,6 @@ public class Week {
 
     public void setDay(Day day, Weekday dayOfWeek){
         days[dayOfWeek.ordinal()] = day;
-    }
-
-    /**
-     * helper method for the constructor that creates daily menus and stores them inside the weekly menu
-     * @param dayData a collection of HTML elements with the data needed to create daily menus
-     */
-    public void makeDays(Elements dayData){
-        // Days of week start with 0 on Sunday
-        for (Element dayMenu : dayData){
-            String dayOfWeek = dayMenu.className();
-            dayOfWeek = dayOfWeek.substring(dayOfWeek.length() -1);
-            days[Integer.parseInt(dayOfWeek)] = new Day(dayMenu);
-        }
     }
 
     /**
@@ -65,10 +68,9 @@ public class Week {
 
     // Check if days array is all null
     public boolean isEmpty(){
-        boolean flag = true;
-        for (Day day: days){
-            if (day != null) flag = false;
-        }
-        return flag;
+        for (Day day: days)
+            if (day != null)
+                return false;
+        return true;
     }
 }

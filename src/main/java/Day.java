@@ -7,6 +7,8 @@
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.util.Date;
+
 public class Day {
     private String date="";
     private Meal lunch;
@@ -34,43 +36,27 @@ public class Day {
         dinner = null;
     }
 
+    public void setDate(Date date1){
+        if (lunch != null)
+            lunch.setDate(date1, true);
+        if (dinner != null)
+            dinner.setDate(date1, false);
+    }
+
     public void setDinner(Meal dinner){
         this.dinner = dinner;
     }
+
     public void setLunch(Meal lunch){
         this.lunch = lunch;
     }
 
-    /**
-     * @return the dinner meal of a given day
-     */
     public Meal getDinner(){
         return dinner;
     }
 
-    /**
-     * @return the lunch meal of a given day
-     */
     public Meal getLunch(){
         return lunch;
     }
 
-    /**Implemented Dropdown list UI that pulls data from Cafe Mac's website.
-
-     * @return the days date in string form e.g. Monday, February 17th, 2014
-     */
-    public String getDate(){
-        return date;
-    }
-
-    /**
-     * @return a human readable representation of the day's menu
-     */
-    public String toString(){
-        if (lunch != null){
-            return date + "\nLUNCH \n" + lunch.toString() + "\nDINNER\n" + dinner.toString();
-        } else{
-            return "No Menu Published";
-        }
-    }
 }

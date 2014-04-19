@@ -2,6 +2,8 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by jeffrey on 2/11/14.
@@ -13,12 +15,16 @@ public class Food {
     private String description;
     private Boolean glutenFree;
     private Restriction restriction;
+    private Set<Review> reviews;
+    private int rating;
+    private int ratingCount;
     // ArrayList<Review> reviews;
 
     /* takes an HTML element representing a food and then
        turns it into a useful java object.
      */
     public Food(Element itemData){
+        reviews = new HashSet<Review>();
         description = "";
         glutenFree = false;
         Element foodData = itemData.getElementsByClass("eni-menu-item-name").first();
@@ -82,43 +88,40 @@ public class Food {
         return Restriction.NONE;
     }
 
-    /**
-     * @return a human readable representation of the menu item
-     */
-    public String toString(){
-        String food = name;
-        if (description != ""){
-            food = food + "\n\t" + description;
-        }
-        /**if (restrictions.size() > 0){
-            for (String restriction : restrictions){
-                food = food + "\n\t" + restriction;
-            }
-        } */
-        return food;
-    }
 
-    /**
-     * @param r matchgluten a String representing a dietary restriction possible options are
-     *                    vegetarian, vegan, made-without-gluten, and seafood-watch
-     * @return whether the food matches that dietary restriction
-     */
-    public boolean matchRestriction(Restriction r, boolean matchGluten){
-        return (restriction.ordinal() <= r.ordinal()) && (glutenFree || !matchGluten);
-    }
-
-    /**
-     * @return the name of the menu item
-     */
     public String getName(){
         return name;
     }
 
-    /**
-     * @return the descriptors associated with the menu item NOT the dietary restrictions
-     */
     public String getDescription(){
         return description;
     }
 
+    public Set<Review> getReviews(){
+        return reviews;
+    }
+
+    public void addReview(Review review){
+        reviews.add(review);
+    }
+
+    public void setReviews(Set<Review> reviews){
+        this.reviews = reviews;
+    }
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
+
+    public int getRatingCount() {
+        return ratingCount;
+    }
+
+    public void setRatingCount(int ratingCount) {
+        this.ratingCount = ratingCount;
+    }
 }
