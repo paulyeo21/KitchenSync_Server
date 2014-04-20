@@ -14,8 +14,9 @@ public class Food {
     private String name;
     private String description;
     private Boolean glutenFree;
-    private Restriction restriction;
+    private Restriction restriction; //convert to something else int? for DB
     private Set<Review> reviews;
+    private Set<Station> stations; //DB Only
     private int rating;
     private int ratingCount;
     // ArrayList<Review> reviews;
@@ -31,12 +32,14 @@ public class Food {
         name = foodData.text();
         makeDescription(itemData);
         restriction = makeRestrictions(foodData);
+        stations = new HashSet<Station>();
     }
     public Food(String name, String description, ArrayList<String> restrictions){
         glutenFree = false;
         this.name = name;
         this.description = description;
         this.restriction = makeRestrictions(restrictions);
+        stations = new HashSet<Station>();
     }
 
     /**
@@ -88,6 +91,17 @@ public class Food {
         return Restriction.NONE;
     }
 
+    public Set<Station> getStations() {
+        return stations;
+    }
+
+    public void setStations(Set<Station> stations) {
+        this.stations = stations;
+    }
+
+    public void addStation(Station station){
+        stations.add(station);
+    }
 
     public String getName(){
         return name;

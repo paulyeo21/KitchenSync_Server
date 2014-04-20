@@ -4,7 +4,7 @@ import java.util.Date;
  * Created by jeffrey on 4/19/14.
  */
 public class Review {
-    private Food food;
+    private Food food; //DB only
     private String reviewer;
     private String text;
     private Date date;

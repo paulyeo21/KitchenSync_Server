@@ -2,10 +2,7 @@
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by jeffrey on 2/11/14.
@@ -13,15 +10,15 @@ import java.util.List;
  */
 
 public class Meal {
-    private ArrayList <Station> stations;
+    private Set<Station> stations;
     private Date date;
-    private boolean isLunch;
+    private boolean isLunch; //DB only
     /**
      * constructor that creates a meal
      * @param mealData HTML Element containing the data needed to make a meal
      */
     public Meal(Element mealData){
-        stations = new ArrayList<Station>();
+        stations = new HashSet<Station>();
         Elements items = mealData.select("tbody > *");
         Station currentStation = new Station("", this);
         for (Element item : items){
@@ -32,15 +29,16 @@ public class Meal {
             } else if (item.hasClass("price-")) {
                 Food food = new Food(item);
                 currentStation.addFood(food);
+                food.addStation(currentStation);
             }
         }
     }
 
     public Meal(){
-        stations = new ArrayList<Station>();
+        stations = new HashSet<Station>();
     }
 
-    public void setStations(ArrayList<Station> stations){
+    public void setStations(HashSet<Station> stations){
         this.stations = stations;
     }
 
@@ -49,7 +47,7 @@ public class Meal {
         this.isLunch = isLunch;
     }
 
-    public ArrayList<Station> getStations(){
+    public Set<Station> getStations(){
         return stations;
     }
 }

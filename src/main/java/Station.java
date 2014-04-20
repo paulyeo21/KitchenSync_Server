@@ -1,5 +1,7 @@
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by jeffrey on 2/11/14.
@@ -8,7 +10,7 @@ import java.util.List;
 public class Station {
     private final String name;
     private Meal meal;
-    private List<Food> foods;
+    private Set<Food> foods;
 
     /**
      * Creates a station
@@ -16,7 +18,7 @@ public class Station {
      */
     public Station(String name, Meal meal){
         this.name = name;
-        foods = new ArrayList<Food>();
+        foods = new HashSet<Food>();
     }
 
     public void setMeal(Meal meal) {
@@ -31,16 +33,12 @@ public class Station {
        foods.add(food);
     }
 
-    public void setFoods(ArrayList<Food> foods){
+    public void setFoods(Set<Food> foods){
         this.foods = foods;
     }
 
-    public List<Food> getFoods(){
+    public Set<Food> getFoods(){
         return foods;
-    }
-
-    public void setFoods(List<Food> foods) {
-        this.foods = foods;
     }
 
     public String getName(){
