@@ -2,12 +2,9 @@ import org.hibernate.annotations.GenericGenerator;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import javax.persistence.GeneratedValue;
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
-
+import javax.validation.constraints.NotNull;
+import java.util.*;
 /**
  * Created by jeffrey on 2/11/14.
  * a Food represents a dish being served in cafe mac
@@ -20,6 +17,7 @@ public class Food {
     @GenericGenerator(name="increment", strategy="increment")
     private Long foodId; //DB only
 
+    @NotNull
     private String name;
 
     private String description;
@@ -152,5 +150,9 @@ public class Food {
 
     public void setId(Long id) {
         this.foodId = foodId;
+    }
+
+    public boolean equals(Food other){
+        return this.name == other.name;
     }
 }

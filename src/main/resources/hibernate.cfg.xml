@@ -28,9 +28,11 @@ dump it to a DDL file, then review it and handle forward migrations manually.
 
         <property name="javax.persistence.validation.mode">callback</property>
 
-        <!--<mapping class="CachedServerResponse"></mapping>-->
-        <mapping class="Food"></mapping>
+        <mapping class="CachedServerResponse"></mapping>
+        <mapping class="Meal"></mapping>
         <mapping class="Station"></mapping>
+        <mapping class="Food"></mapping>
+        <mapping class="Review"></mapping>
 
     </session-factory>
 

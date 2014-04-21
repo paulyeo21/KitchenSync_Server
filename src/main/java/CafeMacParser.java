@@ -11,6 +11,7 @@ import org.jsoup.nodes.Document;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import com.google.gson.Gson;
@@ -37,12 +38,23 @@ public class CafeMacParser {
 
     public static void main (String[] args) {
         Week week = new CafeMacParser().parse(CAFE_MAC_URL);
-        Meal meal = week.getMeal();
-        Set<Station> station = meal.getStations();
-        Set<Food> food = station.getFood();
+        List<Meal> meals = week.getMeals();
+
+        /*
+        Get a list of meals
+        Check to see if the meal is in the database
+        Yes
+            pull meal out of database
+            reconcile meal
+        No
+            Check foods in database
+                Yes: reconcile food
+            save meal
+
+         */
     //        Check if the week is null before it gets saved
         if (!week.isEmpty()) {
-            String jsonMenu = gson.toJson(week);
+//            String jsonMenu = gson.toJson(week);
 //            CachedServerResponse menu = new CachedServerResponse();
 
             Session session = sessionFactory.openSession();
@@ -57,14 +69,20 @@ public class CafeMacParser {
 //            menu.setCreatedAt(new Date());
 //            session.save(menu);
 
-            Food food1 = new Food();
-            food1.setRating(10);
-            Station station1 = new Station();
-            Station station2 = new Station();
-            Station station3 = new Station();
-            Set<Station> reviews = new Set<Station>();
-            food1.setStations(reviews);
+
+            for (Meal meal : meals) {
+                session.save(meal);
+                for (Station station: meal.getStations()) {
+                    session.save(station);
+                    for (Food food: station.getFoods()) {
+//                        Food duplicateItem = (Food) session.createQuery("FROM Food where name = :Spanish rice");
+//                        System.out.println(duplicateItem.getName());
+                        session.save(food);
+                    }
+                }
+            }
             tx.commit();
+            System.out.println(((Food) session.createQuery("SELECT 1 FROM Food").iterate()).getName());
         }
     }
 

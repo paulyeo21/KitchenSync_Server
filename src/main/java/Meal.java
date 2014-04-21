@@ -1,7 +1,11 @@
 
+import org.hibernate.annotations.GenericGenerator;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -9,11 +13,20 @@ import java.util.*;
  * a Meal represents all a meal in cafe mac, it's broken up into different stations
  */
 
+@Entity
 public class Meal {
+    @Id
+    @GeneratedValue(generator="increment")
+    @GenericGenerator(name="increment", strategy="increment")
+    private Long mealId; //DB only
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "meal")
     private Set<Station> stations;
+
+    @NotNull
     private Date date;
+
     private boolean isLunch; //DB only
-    private int id; //DB only
     /**
      * constructor that creates a meal
      * @param mealData HTML Element containing the data needed to make a meal
@@ -68,11 +81,16 @@ public class Meal {
         this.date = date;
     }
 
-    public int getId() {
-        return id;
+    public Long getId() {
+        return mealId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setId(Long id) {
+        this.mealId = mealId;
+    }
+    public boolean sameMeal(Meal other){
+        SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd");
+        return fmt.format(this.date).equals(fmt.format(other.date))
+                && (this.isLunch == other.isLunch);
     }
 }

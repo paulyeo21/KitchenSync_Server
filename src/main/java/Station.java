@@ -7,12 +7,17 @@ import java.util.*;
  * Created by jeffrey on 2/11/14.
  * a Station represents an actual station in cafe mac and contains menu items
  */
+
+@Entity
 public class Station {
     @Id
     @GeneratedValue(generator="increment")
     @GenericGenerator(name="increment", strategy="increment")
     private Long id;
     private String name;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "MEAL_ID", nullable = false)
     private Meal meal;
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "stations")
@@ -27,6 +32,7 @@ public class Station {
     public Station(String name, Meal meal){
         this.name = name;
         foods = new HashSet<Food>();
+        this.meal = meal;
     }
 
     public void setMeal(Meal meal) {
@@ -63,5 +69,9 @@ public class Station {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public boolean equals(Station other){
+        return this.name == other.name;
     }
 }

@@ -74,4 +74,16 @@ public class Week {
                 return false;
         return true;
     }
+
+    public List<Meal> getMeals(){
+        List<Meal> meals = new ArrayList<Meal>();
+        for(Day day : days){
+            if (day.getLunch() != null)
+                meals.add(day.getLunch());
+            if (day.getDinner() != null)
+                meals.add(day.getDinner());
+        }
+        return meals;
+    }
+
 }

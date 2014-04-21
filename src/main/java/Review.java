@@ -7,6 +7,8 @@ import java.util.Date;
 /**
  * Created by jeffrey on 4/19/14.
  */
+
+@Entity
 public class Review {
     @Id
     @GeneratedValue(generator="increment")
