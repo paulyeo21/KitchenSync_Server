@@ -13,6 +13,7 @@ public class Meal {
     private Set<Station> stations;
     private Date date;
     private boolean isLunch; //DB only
+    private int id; //DB only
     /**
      * constructor that creates a meal
      * @param mealData HTML Element containing the data needed to make a meal
@@ -38,7 +39,7 @@ public class Meal {
         stations = new HashSet<Station>();
     }
 
-    public void setStations(HashSet<Station> stations){
+    public void setStations(Set<Station> stations){
         this.stations = stations;
     }
 
@@ -49,5 +50,29 @@ public class Meal {
 
     public Set<Station> getStations(){
         return stations;
+    }
+
+    public boolean isLunch() {
+        return isLunch;
+    }
+
+    public void setLunch(boolean isLunch) {
+        this.isLunch = isLunch;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

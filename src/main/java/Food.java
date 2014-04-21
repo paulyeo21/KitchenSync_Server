@@ -17,10 +17,11 @@ public class Food {
     private Restriction restriction; //convert to something else int? for DB
     private Set<Review> reviews;
     private Set<Station> stations; //DB Only
+    private int id; //DB only
     private int rating;
     private int ratingCount;
-    // ArrayList<Review> reviews;
 
+    public Food(){}
     /* takes an HTML element representing a food and then
        turns it into a useful java object.
      */
@@ -32,13 +33,6 @@ public class Food {
         name = foodData.text();
         makeDescription(itemData);
         restriction = makeRestrictions(foodData);
-        stations = new HashSet<Station>();
-    }
-    public Food(String name, String description, ArrayList<String> restrictions){
-        glutenFree = false;
-        this.name = name;
-        this.description = description;
-        this.restriction = makeRestrictions(restrictions);
         stations = new HashSet<Station>();
     }
 
@@ -66,15 +60,6 @@ public class Food {
             Restriction r = stringToRestriction(restrictionType);
             if (r.ordinal() < highestLevel.ordinal())
                 highestLevel = r;
-        }
-        return highestLevel;
-    }
-    private Restriction makeRestrictions(ArrayList<String> restrictions){
-        Restriction highestLevel = Restriction.NONE;
-        for (String r : restrictions){
-            Restriction restriction = stringToRestriction(r);
-            if (restriction.ordinal() < highestLevel.ordinal())
-                highestLevel = restriction;
         }
         return highestLevel;
     }
@@ -137,5 +122,13 @@ public class Food {
 
     public void setRatingCount(int ratingCount) {
         this.ratingCount = ratingCount;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

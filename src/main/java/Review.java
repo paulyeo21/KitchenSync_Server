@@ -8,6 +8,9 @@ public class Review {
     private String reviewer;
     private String text;
     private Date date;
+    private int id; //DB only
+
+    public Review(){}
 
     public Review(String reviewer, String text, Food food){
         this.food = food;
@@ -38,5 +41,21 @@ public class Review {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }

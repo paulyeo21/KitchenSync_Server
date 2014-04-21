@@ -8,9 +8,12 @@ import java.util.Set;
  * a Station represents an actual station in cafe mac and contains menu items
  */
 public class Station {
-    private final String name;
+    private String name;
     private Meal meal;
     private Set<Food> foods;
+    private int id;
+
+    public Station(){}
 
     /**
      * Creates a station
@@ -45,4 +48,15 @@ public class Station {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }
