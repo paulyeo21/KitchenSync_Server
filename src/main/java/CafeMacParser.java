@@ -41,18 +41,6 @@ public class CafeMacParser {
         Week week = new CafeMacParser().parse(CAFE_MAC_URL);
         List<Meal> meals = week.getMeals();
 
-        /*
-        Get a list of meals
-        Check to see if the meal is in the database
-        Yes
-            pull meal out of database
-            reconcile meal
-        No
-            Check foods in database
-                Yes: reconcile food
-            save meal
-
-         */
     //        Check if the week is null before it gets saved
         if (!week.isEmpty()) {
 //            String jsonMenu = gson.toJson(week);
@@ -65,7 +53,7 @@ public class CafeMacParser {
 //            String delete = "DELETE FROM CachedServerResponse";
 //            Query query = session.createQuery(delete);
 //            query.executeUpdate();
-//
+
 //            menu.setMenu(jsonMenu);
 //            menu.setCreatedAt(new Date());
 //            session.save(menu);
