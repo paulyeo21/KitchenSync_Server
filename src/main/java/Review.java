@@ -1,14 +1,27 @@
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
  * Created by jeffrey on 4/19/14.
  */
 public class Review {
+    @Id
+    @GeneratedValue(generator="increment")
+    @GenericGenerator(name="increment", strategy="increment")
+    private Long id; //DB only
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "FOOD_ID", nullable = false)
     private Food food; //DB only
+
     private String reviewer;
     private String text;
-    private Date date;
-    private int id; //DB only
+
+    @NotNull
+    private Date createdAt;
 
     public Review(){}
 
@@ -16,7 +29,7 @@ public class Review {
         this.food = food;
         this.reviewer = reviewer;
         this.food = food;
-        date = new Date();
+        createdAt = new Date();
     }
 
     public Food getFood() {
@@ -43,19 +56,19 @@ public class Review {
         this.text = text;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
     public Date getDate() {
-        return date;
+        return createdAt;
     }
 
     public void setDate(Date date) {
-        this.date = date;
+        this.createdAt = createdAt;
     }
 }

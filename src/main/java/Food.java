@@ -18,28 +18,29 @@ public class Food {
     @Id
     @GeneratedValue(generator="increment")
     @GenericGenerator(name="increment", strategy="increment")
-    private Long id; //DB only
+    private Long foodId; //DB only
 
-    @Column(name = "Name")
     private String name;
 
-    @Column(name = "Description")
     private String description;
 
-    @Column(name = "Gluten")
     private Boolean glutenFree;
 
-    @Column(name = "Restriction")
     @Enumerated(EnumType.STRING)
     private Restriction restriction; //convert to something else int? for DB
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "Review")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "food")
     private Set<Review> reviews;
 
-    @Column(name = "Station")
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "food_station_pair", joinColumns = {
+            @JoinColumn(name = "FOOD_ID", nullable = false, updatable = false) },
+            inverseJoinColumns = { @JoinColumn(name = "STATION_ID",
+                    nullable = false, updatable = false) })
     private Set<Station> stations; //DB Only
+
     private int rating;
+
     private int ratingCount;
 
     public Food(){}
@@ -146,10 +147,10 @@ public class Food {
     }
 
     public Long getId() {
-        return id;
+        return foodId;
     }
 
     public void setId(Long id) {
-        this.id = id;
+        this.foodId = foodId;
     }
 }

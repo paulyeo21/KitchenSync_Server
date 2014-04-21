@@ -11,6 +11,7 @@ import org.jsoup.nodes.Document;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.Set;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -36,22 +37,33 @@ public class CafeMacParser {
 
     public static void main (String[] args) {
         Week week = new CafeMacParser().parse(CAFE_MAC_URL);
+        Meal meal = week.getMeal();
+        Set<Station> station = meal.getStations();
+        Set<Food> food = station.getFood();
     //        Check if the week is null before it gets saved
         if (!week.isEmpty()) {
             String jsonMenu = gson.toJson(week);
-            CachedServerResponse menu = new CachedServerResponse();
+//            CachedServerResponse menu = new CachedServerResponse();
 
             Session session = sessionFactory.openSession();
             Transaction tx = session.beginTransaction();
 
     //        Delete previous rows from db tables
-            String delete = "DELETE FROM CachedServerResponse";
-            Query query = session.createQuery(delete);
-            query.executeUpdate();
+//            String delete = "DELETE FROM CachedServerResponse";
+//            Query query = session.createQuery(delete);
+//            query.executeUpdate();
+//
+//            menu.setMenu(jsonMenu);
+//            menu.setCreatedAt(new Date());
+//            session.save(menu);
 
-            menu.setMenu(jsonMenu);
-            menu.setCreatedAt(new Date());
-            session.save(menu);
+            Food food1 = new Food();
+            food1.setRating(10);
+            Station station1 = new Station();
+            Station station2 = new Station();
+            Station station3 = new Station();
+            Set<Station> reviews = new Set<Station>();
+            food1.setStations(reviews);
             tx.commit();
         }
     }

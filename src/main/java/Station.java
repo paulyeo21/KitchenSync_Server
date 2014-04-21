@@ -1,17 +1,22 @@
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
+import java.util.*;
 
 /**
  * Created by jeffrey on 2/11/14.
  * a Station represents an actual station in cafe mac and contains menu items
  */
 public class Station {
+    @Id
+    @GeneratedValue(generator="increment")
+    @GenericGenerator(name="increment", strategy="increment")
+    private Long id;
     private String name;
     private Meal meal;
+
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "stations")
     private Set<Food> foods;
-    private int id;
 
     public Station(){}
 
@@ -52,11 +57,11 @@ public class Station {
         this.name = name;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 }
