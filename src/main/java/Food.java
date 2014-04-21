@@ -1,6 +1,9 @@
+import org.hibernate.annotations.GenericGenerator;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -10,14 +13,32 @@ import java.util.Set;
  * a Food represents a dish being served in cafe mac
  * it also contains data about the food such as dietary restrictions
  */
+@Entity
 public class Food {
+    @Id
+    @GeneratedValue(generator="increment")
+    @GenericGenerator(name="increment", strategy="increment")
+    private Long id; //DB only
+
+    @Column(name = "Name")
     private String name;
+
+    @Column(name = "Description")
     private String description;
+
+    @Column(name = "Gluten")
     private Boolean glutenFree;
+
+    @Column(name = "Restriction")
+    @Enumerated(EnumType.STRING)
     private Restriction restriction; //convert to something else int? for DB
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "Review")
     private Set<Review> reviews;
+
+    @Column(name = "Station")
     private Set<Station> stations; //DB Only
-    private int id; //DB only
     private int rating;
     private int ratingCount;
 
@@ -124,11 +145,11 @@ public class Food {
         this.ratingCount = ratingCount;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 }
