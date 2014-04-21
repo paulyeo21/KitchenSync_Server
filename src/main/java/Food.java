@@ -152,4 +152,8 @@ public class Food {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public boolean equals(Food other){
+        return this.name == other.name;
+    }
 }

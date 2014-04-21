@@ -59,4 +59,8 @@ public class Station {
     public void setId(int id) {
         this.id = id;
     }
+
+    public boolean equals(Station other){
+        return this.name == other.name;
+    }
 }

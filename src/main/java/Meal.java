@@ -2,6 +2,7 @@
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -74,5 +75,10 @@ public class Meal {
 
     public void setId(int id) {
         this.id = id;
+    }
+    public boolean sameMeal(Meal other){
+        SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd");
+        return fmt.format(this.date).equals(fmt.format(other.date))
+                && (this.isLunch == other.isLunch);
     }
 }

@@ -36,6 +36,19 @@ public class CafeMacParser {
 
     public static void main (String[] args) {
         Week week = new CafeMacParser().parse(CAFE_MAC_URL);
+
+        /*
+        Get a list of meals
+        Check to see if the meal is in the database
+        Yes
+            pull meal out of database
+            reconcile meal
+        No
+            Check foods in database
+                Yes: reconcile food
+            save meal
+
+         */
     //        Check if the week is null before it gets saved
         if (!week.isEmpty()) {
             String jsonMenu = gson.toJson(week);
