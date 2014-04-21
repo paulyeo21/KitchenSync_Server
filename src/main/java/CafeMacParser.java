@@ -12,6 +12,7 @@ import org.jsoup.nodes.Document;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 import com.google.gson.Gson;
@@ -69,20 +70,29 @@ public class CafeMacParser {
 //            menu.setCreatedAt(new Date());
 //            session.save(menu);
 
-
             for (Meal meal : meals) {
                 session.save(meal);
                 for (Station station: meal.getStations()) {
                     session.save(station);
                     for (Food food: station.getFoods()) {
-//                        Food duplicateItem = (Food) session.createQuery("FROM Food where name = :Spanish rice");
-//                        System.out.println(duplicateItem.getName());
-                        session.save(food);
+
+                        // Check whether food item already exists in DB
+                        try { Food duplicateItem = (Food) session.createQuery("FROM Food f where f.name = :name")
+                                .setString("name", food.getName()).iterate().next();
+                        } catch (NoSuchElementException e) {
+                            session.save(food);
+                        }
                     }
                 }
             }
+
             tx.commit();
-            System.out.println(((Food) session.createQuery("SELECT 1 FROM Food").iterate()).getName());
+
+//            try { Food duplicateItem = (Food) session.createQuery("FROM Food f where f.name = :name")
+//                    .setString("name", "Yo").iterate().next();
+//            } catch (NoSuchElementException e) {
+//                System.out.println("-----> Nope");
+//            }
         }
     }
 
