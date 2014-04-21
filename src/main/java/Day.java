@@ -7,56 +7,59 @@
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Day {
     private String date="";
-    private Meal lunch;
-    private Meal dinner;
+    private Meal[] meals = new Meal[3];
 
     /**
      * Creates a new daily menu object containing 2 meals, lunch and dinner
      * @param dayElem an HTML element that contains the data needed to create a daily menu
      */
     public Day(Element dayElem){
-        Elements meals = dayElem.select(".row-item > .my-day-menu-table");
-        if (dayElem.select("> *").hasClass("menu-date-heading")){
-            date = dayElem.getElementsByClass("menu-date-heading").first().text();
-            dinner = new Meal(meals.get(1));
-            lunch = new Meal(meals.get(0));
-        }
-        else{
-            //this means there's no menu for the day
-            lunch = null;
-            dinner = null;
+        Element mealData = dayElem.select(".row-item").first();
+        if (mealData != null){
+            Elements  meals = mealData.children();
+            if (dayElem.select("> *").hasClass("menu-date-heading"))
+                date = dayElem.getElementsByClass("menu-date-heading").first().text();
+            for (int i=0; i<meals.size(); i++){
+                String type = meals.get(i).text();
+                MealType mealType= MealType.valueOf(type.toUpperCase());
+                i++;
+                setMeal(new Meal(meals.get(i) , mealType), mealType);
+            }
         }
     }
-    public Day(){
-        lunch = null;
-        dinner = null;
-    }
+    public Day(){}
 
     public void setDate(Date date1){
-        if (lunch != null)
-            lunch.setDate(date1, true);
-        if (dinner != null)
-            dinner.setDate(date1, false);
+        for (Meal meal : meals) {
+            if (meal != null)
+                meal.setDate(date1);
+        }
     }
 
-    public void setDinner(Meal dinner){
-        this.dinner = dinner;
+    public Meal[] getMeals() {
+        return meals;
     }
 
-    public void setLunch(Meal lunch){
-        this.lunch = lunch;
+    public void setMeals(Meal[] meals) {
+        this.meals = meals;
     }
-
-    public Meal getDinner(){
-        return dinner;
+    public void setMeal(Meal meal, MealType type){
+        meals[type.ordinal()] = meal;
     }
-
-    public Meal getLunch(){
-        return lunch;
+    public Meal getMeal(MealType type){
+        return meals[type.ordinal()];
     }
-
+    public List<Meal> getRealMeals(){
+        List<Meal> mealList = new ArrayList<Meal>();
+        for(Meal meal : meals)
+            if (meal != null)
+                mealList.add(meal);
+        return mealList;
+    }
 }

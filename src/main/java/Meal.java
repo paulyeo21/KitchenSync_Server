@@ -26,14 +26,17 @@ public class Meal {
     @NotNull
     private Date date;
 
-    private boolean isLunch; //DB only
+    @Enumerated(EnumType.ORDINAL)
+    private MealType mealType;
     /**
      * constructor that creates a meal
      * @param mealData HTML Element containing the data needed to make a meal
      */
-    public Meal(Element mealData){
+    public Meal(Element mealData, MealType mealType){
+        this.mealType = mealType;
         stations = new HashSet<Station>();
         Elements items = mealData.select("tbody > *");
+        System.out.println(items.size());
         Station currentStation = new Station("", this);
         for (Element item : items){
             if (item.hasClass("menu-station")) {
@@ -56,21 +59,21 @@ public class Meal {
         this.stations = stations;
     }
 
-    public void setDate(Date date, boolean isLunch){
+    public void setDate(Date date, MealType mealType){
         this.date = date;
-        this.isLunch = isLunch;
+        this.mealType = mealType;
     }
 
     public Set<Station> getStations(){
         return stations;
     }
 
-    public boolean isLunch() {
-        return isLunch;
+    public MealType getMealType() {
+        return mealType;
     }
 
-    public void setLunch(boolean isLunch) {
-        this.isLunch = isLunch;
+    public void setMealType(boolean isLunch) {
+        this.mealType = mealType;
     }
 
     public Date getDate() {
@@ -81,16 +84,17 @@ public class Meal {
         this.date = date;
     }
 
-    public Long getId() {
+    public Long getMealId() {
         return mealId;
     }
 
-    public void setId(Long id) {
+    public void setMealId(Long id) {
         this.mealId = mealId;
     }
+
     public boolean sameMeal(Meal other){
         SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd");
         return fmt.format(this.date).equals(fmt.format(other.date))
-                && (this.isLunch == other.isLunch);
+                && (this.mealType == other.mealType);
     }
 }

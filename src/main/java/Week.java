@@ -77,12 +77,8 @@ public class Week {
 
     public List<Meal> getMeals(){
         List<Meal> meals = new ArrayList<Meal>();
-        for(Day day : days){
-            if (day.getLunch() != null)
-                meals.add(day.getLunch());
-            if (day.getDinner() != null)
-                meals.add(day.getDinner());
-        }
+        for(Day day : days)
+            meals.addAll(day.getRealMeals());
         return meals;
     }
 

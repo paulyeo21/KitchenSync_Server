@@ -66,11 +66,11 @@ public class Review {
         this.id = id;
     }
 
-    public Date getDate() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setDate(Date date) {
+    public void setCreatedAt(Date date) {
         this.createdAt = createdAt;
     }
 }

@@ -7,7 +7,6 @@ import java.util.*;
  * Created by jeffrey on 2/11/14.
  * a Station represents an actual station in cafe mac and contains menu items
  */
-
 @Entity
 public class Station {
     @Id
