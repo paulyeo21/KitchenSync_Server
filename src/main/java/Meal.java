@@ -39,7 +39,7 @@ public class Meal {
         this.mealType = mealType;
         stations = new HashSet<Station>();
         Elements items = mealData.select("tbody > *");
-        System.out.println(items.size());
+//        System.out.println(items.size());
         Station currentStation = new Station("", this);
         for (Element item : items){
             if (item.hasClass("menu-station")) {

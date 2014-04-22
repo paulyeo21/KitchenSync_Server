@@ -39,40 +39,40 @@ public class CafeMacParser {
 
     public static void main (String[] args) {
         Week week = new CafeMacParser().parse(CAFE_MAC_URL);
-        List<Meal> meals = week.getMeals();
+//        List<Meal> meals = week.getMeals();
 
     //        Check if the week is null before it gets saved
         if (!week.isEmpty()) {
-//            String jsonMenu = gson.toJson(week);
-//            CachedServerResponse menu = new CachedServerResponse();
+            String jsonMenu = gson.toJson(week);
+            CachedServerResponse menu = new CachedServerResponse();
 
             Session session = sessionFactory.openSession();
             Transaction tx = session.beginTransaction();
 
     //        Delete previous rows from db tables
-//            String delete = "DELETE FROM CachedServerResponse";
-//            Query query = session.createQuery(delete);
-//            query.executeUpdate();
+            String delete = "DELETE FROM CachedServerResponse";
+            Query query = session.createQuery(delete);
+            query.executeUpdate();
 
-//            menu.setMenu(jsonMenu);
-//            menu.setCreatedAt(new Date());
-//            session.save(menu);
+            menu.setMenu(jsonMenu);
+            menu.setCreatedAt(new Date());
+            session.save(menu);
 
-            for (Meal meal : meals) {
-                session.save(meal);
-                for (Station station: meal.getStations()) {
-                    session.save(station);
-                    for (Food food: station.getFoods()) {
-
-                        // Check whether food item already exists in DB
-                        try { Food duplicateItem = (Food) session.createQuery("FROM Food f where f.name = :name")
-                                .setString("name", food.getName()).iterate().next();
-                        } catch (NoSuchElementException e) {
-                            session.save(food);
-                        }
-                    }
-                }
-            }
+//            for (Meal meal : meals) {
+//                session.save(meal);
+//                for (Station station: meal.getStations()) {
+//                    session.save(station);
+//                    for (Food food: station.getFoods()) {
+//
+//                        // Check whether food item already exists in DB
+//                        try { Food duplicateItem = (Food) session.createQuery("FROM Food f where f.name = :name")
+//                                .setString("name", food.getName()).iterate().next();
+//                        } catch (NoSuchElementException e) {
+//                            session.save(food);
+//                        }
+//                    }
+//                }
+//            }
 
             tx.commit();
 
