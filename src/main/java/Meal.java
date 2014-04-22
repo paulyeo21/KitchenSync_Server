@@ -1,4 +1,5 @@
 
+import com.google.gson.annotations.Expose;
 import org.hibernate.annotations.GenericGenerator;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -20,12 +21,14 @@ public class Meal {
     @GenericGenerator(name="increment", strategy="increment")
     private Long mealId; //DB only
 
+    @Expose
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "meal")
     private Set<Station> stations;
 
     @NotNull
     private Date date;
 
+    @Expose
     @Enumerated(EnumType.ORDINAL)
     private MealType mealType;
     /**

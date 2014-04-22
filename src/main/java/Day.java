@@ -4,6 +4,7 @@
  * day. Each day has two meals, lunch and dinner
  */
 
+import com.google.gson.annotations.Expose;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -12,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 public class Day {
-    private String date="";
+    @Expose
     private Meal[] meals = new Meal[3];
 
     /**
@@ -23,8 +24,6 @@ public class Day {
         Element mealData = dayElem.select(".row-item").first();
         if (mealData != null){
             Elements  meals = mealData.children();
-            if (dayElem.select("> *").hasClass("menu-date-heading"))
-                date = dayElem.getElementsByClass("menu-date-heading").first().text();
             for (int i=0; i<meals.size(); i++){
                 String type = meals.get(i).text();
                 MealType mealType= MealType.valueOf(type.toUpperCase());

@@ -25,7 +25,7 @@ public class CafeMacParser {
 
     private static final String CAFE_MAC_URL = "http://macalester.cafebonappetit.com/hungry/cafe-mac";
     private static SessionFactory sessionFactory = createSessionFactory();
-    private static Gson gson = new Gson();
+    private static Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 
     public Week parse(String url) {
         Document doc = null;

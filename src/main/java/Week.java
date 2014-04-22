@@ -5,6 +5,7 @@
  * parse the menu from cafe mac's website
  */
 
+import com.google.gson.annotations.Expose;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.Set;
 
 public class Week {
-
+    @Expose
     private Day[] days = new Day[7];
 
     /**     * creates a new weekly menu by scraping data from the Bon Appetit website

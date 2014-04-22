@@ -1,3 +1,4 @@
+import com.google.gson.annotations.Expose;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -13,12 +14,15 @@ public class Station {
     @GeneratedValue(generator="increment")
     @GenericGenerator(name="increment", strategy="increment")
     private Long id;
+
+    @Expose
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEAL_ID", nullable = false)
     private Meal meal;
 
+    @Expose
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "stations")
     private Set<Food> foods;
 

@@ -1,3 +1,4 @@
+import com.google.gson.annotations.Expose;
 import org.hibernate.annotations.GenericGenerator;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -12,21 +13,27 @@ import java.util.*;
  */
 @Entity
 public class Food {
+    @Expose
     @Id
     @GeneratedValue(generator="increment")
     @GenericGenerator(name="increment", strategy="increment")
     private Long foodId; //DB only
 
+    @Expose
     @NotNull
     private String name;
 
+    @Expose
     private String description;
 
+    @Expose
     private Boolean glutenFree;
 
+    @Expose
     @Enumerated(EnumType.STRING)
     private Restriction restriction; //convert to something else int? for DB
 
+    @Expose
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "food")
     private Set<Review> reviews;
 
@@ -37,8 +44,10 @@ public class Food {
                     nullable = false, updatable = false) })
     private Set<Station> stations; //DB Only
 
+    @Expose
     private int rating;
 
+    @Expose
     private int ratingCount;
 
     public Food(){}
