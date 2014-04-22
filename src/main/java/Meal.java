@@ -16,6 +16,10 @@ import java.util.*;
 
 @Entity
 public class Meal {
+    @Expose
+    @Enumerated(EnumType.ORDINAL)
+    private MealType mealType;
+
     @Id
     @GeneratedValue(generator="increment")
     @GenericGenerator(name="increment", strategy="increment")
@@ -28,9 +32,6 @@ public class Meal {
     @NotNull
     private Date date;
 
-    @Expose
-    @Enumerated(EnumType.ORDINAL)
-    private MealType mealType;
     /**
      * constructor that creates a meal
      * @param mealData HTML Element containing the data needed to make a meal
