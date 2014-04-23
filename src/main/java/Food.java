@@ -59,7 +59,8 @@ public class Food {
         description = "";
         glutenFree = false;
         Element foodData = itemData.getElementsByClass("eni-menu-item-name").first();
-        name = foodData.text();
+        name = foodData.text().toLowerCase();
+        name = name.substring(0, 1).toUpperCase() + name.substring(1);
         makeDescription(itemData);
         restriction = makeRestrictions(foodData);
         stations = new HashSet<Station>();
