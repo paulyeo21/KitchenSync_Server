@@ -10,6 +10,7 @@ import spark.*;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,8 +55,7 @@ public class CafeMacServer {
                         errors.put(violation.getPropertyPath().toString(), violation.getMessage());
                     }
                     responseBody.put("validationErrors", errors);
-                    String resBody = gson.toJson(responseBody);
-                    return resBody;
+                    return gson.toJson(responseBody);
 
                 } catch (Exception e) {
 
@@ -68,9 +68,60 @@ public class CafeMacServer {
                     responseBody.put("error", e.getLocalizedMessage());
                     responseBody.put("For more information", "http://macalester.cafebonappetit.com/" +
                             "hungry/cafe-mac/");
-                    String resBody = gson.toJson(responseBody);
-                    return resBody;
+                    return gson.toJson(responseBody);
                 }
+            }
+        });
+
+        get(new Route("/v1/test") {
+            @Override
+            public Object handle(Request request, Response response) {
+                response.type("application/json");
+
+                Session session = sessionFactory.openSession();
+
+                Food test = (Food) session.createQuery("from Food where name = :name")
+                        .setString("name", "Vegetable egg rolls").iterate().next();
+
+                Map<String,Object> responseBody = new HashMap<String, Object>();
+                responseBody.put(test.getName(), test.getRating());
+
+                return gson.toJson(responseBody);
+            }
+        });
+
+        post(new Route("/v1/addReview/:review") {
+            @Override
+            public Object handle(Request request, Response response) {
+                Session session = sessionFactory.openSession();
+                Transaction tx = session.beginTransaction();
+
+                // Update database with reviews made by users
+                Query query = session.createQuery("UPDATE Food SET rating = :review WHERE name = :name")
+                        .setString("name", "Vegetable egg rolls")
+                        .setString("review", ":review");
+                query.executeUpdate();
+
+                tx.commit();
+                response.status(200);
+                return response;
+            }
+        });
+
+        post(new Route("/v1/incrementRating/:fooditem") {
+            @Override
+            public Object handle(Request request, Response response) {
+                Session session = sessionFactory.openSession();
+                Transaction tx = session.beginTransaction();
+
+                // Increment the rating for specific food item in database
+                Query query = session.createQuery("UPDATE Food SET rating = rating + 1 WHERE name = :name")
+                        .setString("name", "Vegetable egg rolls");
+                query.executeUpdate();
+
+                tx.commit();
+                response.status(200);
+                return response;
             }
         });
     }

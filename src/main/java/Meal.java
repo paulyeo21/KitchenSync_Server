@@ -40,7 +40,6 @@ public class Meal {
         this.mealType = mealType;
         stations = new HashSet<Station>();
         Elements items = mealData.select("tbody > *");
-//        System.out.println(items.size());
         Station currentStation = new Station("", this);
         for (Element item : items){
             if (item.hasClass("menu-station")) {
@@ -76,7 +75,7 @@ public class Meal {
         return mealType;
     }
 
-    public void setMealType(boolean isLunch) {
+    public void setMealType(MealType mealType) {
         this.mealType = mealType;
     }
 
@@ -90,10 +89,6 @@ public class Meal {
 
     public Long getMealId() {
         return mealId;
-    }
-
-    public void setMealId(Long id) {
-        this.mealId = mealId;
     }
 
     public boolean sameMeal(Meal other){
