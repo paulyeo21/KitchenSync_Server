@@ -30,20 +30,14 @@ public class Week {
                     dayOfWeek = dayOfWeek.substring(dayOfWeek.length() -1);
             days[Integer.parseInt(dayOfWeek)] = new Day(dayMenu);
         }
-        Calendar calendar = Calendar.getInstance();
-        calendar.setFirstDayOfWeek(Calendar.SUNDAY);
-        int today = calendar.get(Calendar.DAY_OF_WEEK);
-        calendar.add(Calendar.DATE, -today);
-        calendar.set(Calendar.HOUR_OF_DAY,0);
-        calendar.set(Calendar.MINUTE,0);
-        calendar.set(Calendar.SECOND,0);
-        calendar.set(Calendar.MILLISECOND,0);
+        Calendar calendar = getNormalizedCalendar();
         for(int i=0; i<7; i++){
             calendar.add(Calendar.DATE, 1);
             if (days[i] != null)
                 days[i].setDate(calendar.getTime());
         }
     }
+    public Week(){}
 
     public Day[] getDays(){
         return days;
@@ -85,6 +79,18 @@ public class Week {
         for(Day day : days)
             meals.addAll(day.getRealMeals());
         return meals;
+    }
+
+    public static Calendar getNormalizedCalendar(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setFirstDayOfWeek(Calendar.SUNDAY);
+        int today = calendar.get(Calendar.DAY_OF_WEEK);
+        calendar.add(Calendar.DATE, -today);
+        calendar.set(Calendar.HOUR_OF_DAY,0);
+        calendar.set(Calendar.MINUTE,0);
+        calendar.set(Calendar.SECOND,0);
+        calendar.set(Calendar.MILLISECOND,0);
+        return calendar;
     }
 
 }

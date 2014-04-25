@@ -2,6 +2,7 @@ import static spark.Spark.*;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.sun.xml.internal.bind.v2.WellKnownNamespace;
 import org.hibernate.*;
 import org.hibernate.Session;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -10,9 +11,7 @@ import spark.*;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class CafeMacServer {
 
@@ -124,6 +123,26 @@ public class CafeMacServer {
                 return response;
             }
         });
+    }
+
+    private Week reconstruct(){
+        Calendar calendar = Week.getNormalizedCalendar();
+        Week week = new Week();
+        for(int i=0; i<7; i++) {
+            calendar.add(Calendar.DATE, 1);
+            Date date = calendar.getTime();
+            Day day = new Day();
+            try {
+                //Todo query database for meals with date = to date save it as an iterable called Meals
+                Iterable<Meal> meals = null;
+                for (Meal meal : meals)
+                    day.setMeal(meal, meal.getMealType());
+            } catch (NoSuchElementException e) {
+                return null;
+            }
+            week.setDay(day, Weekday.values()[i]);
+        }
+        return week;
     }
 
     private static SessionFactory createSessionFactory() {
