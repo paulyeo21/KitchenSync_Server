@@ -83,6 +83,10 @@ public class Meal {
         return date;
     }
 
+    public void setMealId(Long mealId) {
+        this.mealId = mealId;
+    }
+
     public void setDate(Date date) {
         this.date = date;
     }

@@ -34,6 +34,10 @@ public class Week {
         calendar.setFirstDayOfWeek(Calendar.SUNDAY);
         int today = calendar.get(Calendar.DAY_OF_WEEK);
         calendar.add(Calendar.DATE, -today);
+        calendar.set(Calendar.HOUR_OF_DAY,0);
+        calendar.set(Calendar.MINUTE,0);
+        calendar.set(Calendar.SECOND,0);
+        calendar.set(Calendar.MILLISECOND,0);
         for(int i=0; i<7; i++){
             calendar.add(Calendar.DATE, 1);
             if (days[i] != null)

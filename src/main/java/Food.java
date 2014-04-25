@@ -106,6 +106,9 @@ public class Food {
         return Restriction.NONE;
     }
 
+    public void removeStation(Station station){
+        stations.remove(station);
+    }
     public Set<Station> getStations() {
         return stations;
     }
