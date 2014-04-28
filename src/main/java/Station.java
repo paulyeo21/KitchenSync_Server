@@ -20,14 +20,14 @@ public class Station {
     @Expose
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.DELETE})
     @JoinColumn(name = "MEAL_ID", nullable = false)
     private Meal meal;
 
     @Expose
     @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.DELETE})
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "stations")
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "stations")
     private Set<Food> foods;
 
     public Station(){}

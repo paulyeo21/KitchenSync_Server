@@ -16,7 +16,7 @@ import java.util.*;
 public class CafeMacServer {
 
     private static SessionFactory sessionFactory = createSessionFactory();
-    private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    private static Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
 
     public static void main(String[] args) {
 
@@ -27,14 +27,14 @@ public class CafeMacServer {
         get(new Route("/v1/menu") {
             @Override
             public Object handle(Request request, Response response) {
-                Session session = sessionFactory.openSession();
 
                 try {
-                response.type("application/json");
-                CachedServerResponse cachedServerResp = (CachedServerResponse) session.createQuery("from CachedServerResponse cached " +
-                            "order by cached.createdAt desc").iterate().next();
-
-                return cachedServerResp.getMenu();
+                    Week week = reconstruct();
+                    response.type("application/json");
+                    if (week != null) {
+                        return gson.toJson(week);
+                    }
+                    return "";
 
                 } catch (ConstraintViolationException e) {
 
@@ -84,6 +84,7 @@ public class CafeMacServer {
 
                 Map<String,Object> responseBody = new HashMap<String, Object>();
                 responseBody.put(test.getName(), test.getRating());
+                responseBody.put("Rating count", test.getRatingCount());
 
                 return gson.toJson(responseBody);
             }
@@ -107,16 +108,23 @@ public class CafeMacServer {
             }
         });
 
-        post(new Route("/v1/incrementRating/:fooditem") {
+        post(new Route("/v1/rating/:num") {
             @Override
             public Object handle(Request request, Response response) {
                 Session session = sessionFactory.openSession();
                 Transaction tx = session.beginTransaction();
 
                 // Increment the rating for specific food item in database
-                Query query = session.createQuery("UPDATE Food SET rating = rating + 1 WHERE name = :name")
+                Query query = session.createQuery("UPDATE Food SET ratingCount = ratingCount + 1 WHERE name = :name")
                         .setString("name", "Vegetable egg rolls");
+
+                int rating = Integer.parseInt(request.params(":num"));
+                Query query1 = session.createQuery("UPDATE Food SET rating = rating + :num WHERE name = :name")
+                        .setString("name", "Vegetable egg rolls")
+                        .setInteger("num", rating);
+
                 query.executeUpdate();
+                query1.executeUpdate();
 
                 tx.commit();
                 response.status(200);
@@ -133,10 +141,13 @@ public class CafeMacServer {
             Date date = calendar.getTime();
             Day day = new Day();
             try {
-                //Todo query database for meals with date = to date save it as an iterable called Meals
-                Iterable<Meal> meals = null;
+                Session session = sessionFactory.openSession();
+                Query query = session.createQuery("FROM Meal WHERE date = :date")
+                        .setDate("date", date);
+                List<Meal> meals = query.list();
                 for (Meal meal : meals)
                     day.setMeal(meal, meal.getMealType());
+                session.close();
             } catch (NoSuchElementException e) {
                 return null;
             }

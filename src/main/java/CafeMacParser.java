@@ -49,10 +49,16 @@ public class CafeMacParser {
             Transaction tx = session.beginTransaction();
             if (oldWeek != null) {
                 Set<Food> oldFood = week.mergeFoods(oldWeek.getStrippedFoods());
-                session.save(oldFood);
+                for (Food food: oldFood) {
+                    session.save(food);
+                }
+                for (Meal meal : oldWeek.getMeals()) {
+                    session.delete(meal);
+                }
             }
-            session.delete(oldWeek);
-            session.save(week);
+            for (Meal meal : week.getMeals()) {
+                session.save(meal);
+            }
             tx.commit();
         }
     }

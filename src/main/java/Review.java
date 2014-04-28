@@ -1,3 +1,4 @@
+import com.google.gson.annotations.Expose;
 import org.hibernate.annotations.*;
 
 import javax.persistence.*;
@@ -17,14 +18,18 @@ public class Review {
     @GenericGenerator(name="increment", strategy="increment")
     private Long id; //DB only
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.DELETE})
     @JoinColumn(name = "FOOD_ID", nullable = false)
     private Food food; //DB only
 
+
+    @Expose
     private String reviewer;
+    @Expose
     private String text;
 
+    @Expose
     @NotNull
     private Date createdAt;
 

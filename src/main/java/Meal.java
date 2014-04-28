@@ -17,7 +17,7 @@ import java.util.*;
  */
 
 @Entity
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"date", "mealType"})})
+//@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"date", "mealType"})})
 public class Meal {
     @Expose
     @Enumerated(EnumType.ORDINAL)
@@ -29,7 +29,7 @@ public class Meal {
     private Long mealId; //DB only
 
     @Expose
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "meal")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "meal")
     @Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
     private Set<Station> stations;
 

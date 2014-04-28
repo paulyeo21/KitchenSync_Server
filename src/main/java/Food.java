@@ -36,11 +36,11 @@ public class Food {
     private Restriction restriction; //convert to something else int? for DB
 
     @Expose
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "food")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "food")
     @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.DELETE})
     private Set<Review> reviews;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.DELETE})
     @JoinTable(name = "food_station_pair", joinColumns = {
             @JoinColumn(name = "FOOD_ID", nullable = false, updatable = false) },

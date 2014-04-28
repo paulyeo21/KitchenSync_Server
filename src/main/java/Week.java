@@ -102,6 +102,7 @@ public class Week {
         if(oldFoods.size() == 0)
             return;
         foods.add(oldFoods.get(0));
+        oldFoods.remove(0);
         for(Food food : oldFoods){
             boolean duplicate = false;
             for(Food newFood : foods){
@@ -140,6 +141,8 @@ public class Week {
     public Set<Food> mergeFoods(Set<Food> oldFoods){
         if (oldFoods.size() == 0)
             return oldFoods;
+        Set<Food> unusedFood = new HashSet<Food>();
+        unusedFood.addAll(oldFoods);
         Set<Food> foods = getFoods();
         for(Food oldFood: oldFoods){
             for(Food food : foods){
@@ -148,10 +151,12 @@ public class Week {
                     food.getReviews().addAll(oldFood.getReviews());
                     food.setRating(oldFood.getRating());
                     food.setRatingCount(oldFood.getRatingCount());
-                    oldFoods.remove(oldFood);
+                    for(Station station : food.getStations())
+                        station.addFood(food);
+                    unusedFood.remove(oldFood);
                 }
             }
         }
-        return oldFoods;
+        return unusedFood;
     }
 }
