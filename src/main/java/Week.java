@@ -10,10 +10,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Week {
     @Expose
@@ -93,4 +90,66 @@ public class Week {
         return calendar;
     }
 
+    public void clean(){
+        List<Food> foods = new ArrayList<Food>();
+        List<Food> oldFoods = new ArrayList<Food>();
+        for(Day day : days)
+            for(Meal meal : day.getRealMeals())
+                for(Station station :meal.getStations()) {
+                    oldFoods.addAll(station.getFoods());
+                    station.getFoods().clear();
+                }
+        if(oldFoods.size() == 0)
+            return;
+        foods.add(oldFoods.get(0));
+        for(Food food : oldFoods){
+            boolean duplicate = false;
+            for(Food newFood : foods){
+                if (food.equals(newFood)) {
+                    newFood.getStations().addAll(food.getStations());
+                    duplicate = true;
+                }
+            }
+            if (!duplicate)
+                foods.add(food);
+        }
+        for(Food food : foods)
+            for(Station station: food.getStations())
+                station.addFood(food);
+    }
+
+    public Set<Food> getFoods(){
+        Set<Food> oldFoods = new HashSet<Food>();
+        for(Day day : days)
+            for(Meal meal : day.getRealMeals())
+                for(Station station :meal.getStations())
+                    oldFoods.addAll(station.getFoods());
+        return oldFoods;
+    }
+    public Set<Food> getStrippedFoods(){
+        Set<Food> oldFoods = new HashSet<Food>();
+        for(Day day : days)
+            for(Meal meal : day.getRealMeals())
+                for(Station station :meal.getStations())
+                    for(Food food: station.getFoods()){
+                        food.getStations().remove(station);
+                        oldFoods.add(food);
+                    }
+        return oldFoods;
+    }
+    public void mergeFoods(Set<Food> oldFoods){
+        if (oldFoods.size() == 0)
+            return;
+        Set<Food> foods = getFoods();
+        for(Food oldFood: oldFoods){
+            for(Food food : foods){
+                if(food.equals(oldFood)){
+                    food.getStations().addAll(oldFood.getStations());
+                    food.getReviews().addAll(oldFood.getReviews());
+                    food.setRating(oldFood.getRating());
+                    food.setRatingCount(oldFood.getRatingCount());
+                }
+            }
+        }
+    }
 }

@@ -1,5 +1,7 @@
 
 import com.google.gson.annotations.Expose;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.GenericGenerator;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -15,6 +17,7 @@ import java.util.*;
  */
 
 @Entity
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"date", "mealType"})})
 public class Meal {
     @Expose
     @Enumerated(EnumType.ORDINAL)
@@ -27,6 +30,7 @@ public class Meal {
 
     @Expose
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "meal")
+    @Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
     private Set<Station> stations;
 
     @NotNull

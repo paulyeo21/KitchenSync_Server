@@ -1,7 +1,9 @@
 import com.google.gson.annotations.Expose;
-import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
 import java.util.*;
 
 /**
@@ -19,10 +21,12 @@ public class Station {
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.DELETE})
     @JoinColumn(name = "MEAL_ID", nullable = false)
     private Meal meal;
 
     @Expose
+    @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.DELETE})
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "stations")
     private Set<Food> foods;
 

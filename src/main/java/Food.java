@@ -1,9 +1,11 @@
 import com.google.gson.annotations.Expose;
-import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.*;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 import java.util.*;
 /**
@@ -35,9 +37,11 @@ public class Food {
 
     @Expose
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "food")
+    @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.DELETE})
     private Set<Review> reviews;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.DELETE})
     @JoinTable(name = "food_station_pair", joinColumns = {
             @JoinColumn(name = "FOOD_ID", nullable = false, updatable = false) },
             inverseJoinColumns = { @JoinColumn(name = "STATION_ID",
@@ -165,7 +169,16 @@ public class Food {
         this.foodId = foodId;
     }
 
-    public boolean equals(Food other){
-        return this.name == other.name;
+    @Override
+    public boolean equals(Object o){
+        if (o == null)
+            return false;
+        Food other = (Food) o;
+        return this.name.equalsIgnoreCase(other.name);
+    }
+
+    @Override
+    public int hashCode(){
+        return name.hashCode();
     }
 }

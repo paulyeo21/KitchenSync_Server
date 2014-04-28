@@ -1,6 +1,8 @@
-import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
@@ -16,6 +18,7 @@ public class Review {
     private Long id; //DB only
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.DELETE})
     @JoinColumn(name = "FOOD_ID", nullable = false)
     private Food food; //DB only
 

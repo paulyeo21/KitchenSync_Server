@@ -43,66 +43,16 @@ public class CafeMacParser {
 
     //        Check if the week is null before it gets saved
         if (!week.isEmpty()) {
-//            String jsonMenu = gson.toJson(week);
-//            CachedServerResponse menu = new CachedServerResponse();
-
-
-    //        Delete previous rows from db tables
-//            String delete = "DELETE FROM CachedServerResponse";
-//            Query query = session.createQuery(delete);
-//            query.executeUpdate();
-
-//            menu.setMenu(jsonMenu);
-//            menu.setCreatedAt(new Date());
-//            session.save(menu);
-
-            for (Meal meal : meals) {
-                Session session = sessionFactory.openSession();
-                Transaction tx = session.beginTransaction();
-                try {
-                    session.createQuery("FROM Meal m where m.date = :date")
-                            .setString("date", meal.getDate()); //Paul can you make this work?
-                    Meal dbMeal = null; //result of  the query
-                    Set<Station> oldStations = dbMeal.getStations();
-                    meal.setMealId(dbMeal.getMealId());
-                    session.save(meal);
-                    for (Station oldStation : oldStations) {
-                        for (Food food : oldStation.getFoods()) {
-                            food.removeStation(oldStation);
-                            session.save(food);
-                        }
-                        session.delete(oldStation);
-                    }
-                }catch (NoSuchElementException e) {
-                    session.save(meal);
-                }
-                tx.commit();
-                session.close();
-                saveMeal(meal);
-            }
+            week.clean();
+            Week oldWeek = CafeMacServer.reconstruct();
+            if (oldWeek != null)
+                week.mergeFoods(oldWeek.getStrippedFoods());
+            Session session = sessionFactory.openSession();
+            Transaction tx = session.beginTransaction();
+            session.delete(oldWeek);
+            session.save(week);
+            tx.commit();
         }
-    }
-
-    public static void saveMeal(Meal meal){
-        Session session = sessionFactory.openSession();
-        Transaction tx = session.beginTransaction();
-        for (Station station : meal.getStations()) {
-            session.save(station);
-            for (Food food : station.getFoods()) {
-                // Check whether food item already exists in DB
-                try {
-                    session.createQuery("FROM Food f where f.name = :name")
-                            .setString("name", food.getName());
-                    Food dbFood = null; ///result of the query
-                    dbFood.addStation(station);
-                    session.save(dbFood);
-                } catch (NoSuchElementException e) {
-                    session.save(food);
-                }
-            }
-        }
-        tx.commit();
-        session.close();
     }
 
     private static SessionFactory createSessionFactory() {

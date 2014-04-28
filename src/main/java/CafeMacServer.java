@@ -125,7 +125,7 @@ public class CafeMacServer {
         });
     }
 
-    private Week reconstruct(){
+    public static Week reconstruct(){
         Calendar calendar = Week.getNormalizedCalendar();
         Week week = new Week();
         for(int i=0; i<7; i++) {
