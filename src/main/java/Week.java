@@ -137,9 +137,9 @@ public class Week {
                     }
         return oldFoods;
     }
-    public void mergeFoods(Set<Food> oldFoods){
+    public Set<Food> mergeFoods(Set<Food> oldFoods){
         if (oldFoods.size() == 0)
-            return;
+            return oldFoods;
         Set<Food> foods = getFoods();
         for(Food oldFood: oldFoods){
             for(Food food : foods){
@@ -148,8 +148,10 @@ public class Week {
                     food.getReviews().addAll(oldFood.getReviews());
                     food.setRating(oldFood.getRating());
                     food.setRatingCount(oldFood.getRatingCount());
+                    oldFoods.remove(oldFood);
                 }
             }
         }
+        return oldFoods;
     }
 }

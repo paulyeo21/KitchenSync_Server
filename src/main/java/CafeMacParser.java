@@ -45,10 +45,12 @@ public class CafeMacParser {
         if (!week.isEmpty()) {
             week.clean();
             Week oldWeek = CafeMacServer.reconstruct();
-            if (oldWeek != null)
-                week.mergeFoods(oldWeek.getStrippedFoods());
             Session session = sessionFactory.openSession();
             Transaction tx = session.beginTransaction();
+            if (oldWeek != null) {
+                Set<Food> oldFood = week.mergeFoods(oldWeek.getStrippedFoods());
+                session.save(oldFood);
+            }
             session.delete(oldWeek);
             session.save(week);
             tx.commit();
