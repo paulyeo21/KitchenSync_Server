@@ -149,8 +149,6 @@ public class Week {
                 if(food.equals(oldFood)){
                     food.getStations().addAll(oldFood.getStations());
                     food.getReviews().addAll(oldFood.getReviews());
-                    food.setRating(oldFood.getRating());
-                    food.setRatingCount(oldFood.getRatingCount());
                     for(Station station : food.getStations())
                         station.addFood(food);
                     unusedFood.remove(oldFood);

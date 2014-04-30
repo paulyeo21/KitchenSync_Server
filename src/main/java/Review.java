@@ -30,6 +30,9 @@ public class Review {
     private String text;
 
     @Expose
+    private int rating;
+
+    @Expose
     @NotNull
     private Date createdAt;
 

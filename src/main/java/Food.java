@@ -15,7 +15,6 @@ import java.util.*;
  */
 @Entity
 public class Food {
-    @Expose
     @Id
     @GeneratedValue(generator="increment")
     @GenericGenerator(name="increment", strategy="increment")
@@ -24,9 +23,6 @@ public class Food {
     @Expose
     @NotNull
     private String name;
-
-    @Expose
-    private String description;
 
     @Expose
     private Boolean glutenFree;
@@ -48,37 +44,18 @@ public class Food {
                     nullable = false, updatable = false) })
     private Set<Station> stations; //DB Only
 
-    @Expose
-    private int rating;
-
-    @Expose
-    private int ratingCount;
-
     public Food(){}
     /* takes an HTML element representing a food and then
        turns it into a useful java object.
      */
     public Food(Element itemData){
         reviews = new HashSet<Review>();
-        description = "";
         glutenFree = false;
         Element foodData = itemData.getElementsByClass("eni-menu-item-name").first();
         name = foodData.text().toLowerCase();
         name = name.substring(0, 1).toUpperCase() + name.substring(1);
-        makeDescription(itemData);
         restriction = makeRestrictions(foodData);
         stations = new HashSet<Station>();
-    }
-
-    /**
-     * helper method that adds a description to the menu item
-     * @param itemData an HTML element collection representing a food's description
-     */
-    private void makeDescription(Element itemData){
-        Elements foodDescription = itemData.getElementsByClass("eni-menu-description");
-        if (foodDescription.size() > 0){
-            description = foodDescription.first().text();
-        }
     }
 
     /**
@@ -129,10 +106,6 @@ public class Food {
         return name;
     }
 
-    public String getDescription(){
-        return description;
-    }
-
     public Set<Review> getReviews(){
         return reviews;
     }
@@ -143,22 +116,6 @@ public class Food {
 
     public void setReviews(Set<Review> reviews){
         this.reviews = reviews;
-    }
-
-    public int getRating() {
-        return rating;
-    }
-
-    public void setRating(int rating) {
-        this.rating = rating;
-    }
-
-    public int getRatingCount() {
-        return ratingCount;
-    }
-
-    public void setRatingCount(int ratingCount) {
-        this.ratingCount = ratingCount;
     }
 
     public Long getId() {
