@@ -2,6 +2,7 @@ import static spark.Spark.*;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.sun.xml.internal.bind.v2.WellKnownNamespace;
 import org.hibernate.*;
 import org.hibernate.Session;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -10,7 +11,6 @@ import spark.*;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import java.text.NumberFormat;
 import java.util.*;
 
 public class CafeMacServer {
@@ -80,19 +80,15 @@ public class CafeMacServer {
                 Session session = sessionFactory.openSession();
 
                 Food test = (Food) session.createQuery("from Food where name = :name")
-                        .setString("name", "Criss cut fries").iterate().next();
+                        .setString("name", "Vegetable egg rolls").iterate().next();
 
                 Map<String,Object> responseBody = new HashMap<String, Object>();
-                Map<String, Integer> ratingReview = new HashMap<String, Integer>();
-                ratingReview.put("Rating", test.getRating());
-                ratingReview.put("Rating Count", test.getRatingCount());
-                responseBody.put(test.getName(), ratingReview);
 
                 return gson.toJson(responseBody);
             }
         });
 
-        post(new Route("/v1/addReview/") {
+        post(new Route("/v1/addReview/:review") {
             @Override
             public Object handle(Request request, Response response) {
                 Session session = sessionFactory.openSession();
@@ -106,33 +102,23 @@ public class CafeMacServer {
 
                 tx.commit();
                 response.status(200);
-                return "";
+                return response;
             }
         });
 
-        post(new Route("/v1/incrementRating") {
+        post(new Route("/v1/rating/:num") {
             @Override
             public Object handle(Request request, Response response) {
                 Session session = sessionFactory.openSession();
                 Transaction tx = session.beginTransaction();
 
-                Integer rating = 0;
-
-                try {
-                    rating = Integer.parseInt(request.queryParams("rating"));
-                } catch (NumberFormatException e) {
-                }
-                String foodName = request.queryParams("name");
-
                 // Increment the rating for specific food item in database
                 Query query = session.createQuery("UPDATE Food SET ratingCount = ratingCount + 1 WHERE name = :name")
-                        .setString("name", foodName);
+                        .setString("name", "Vegetable egg rolls");
 
-                System.out.println("--->" + rating);
-                System.out.println("--->" + foodName);
-
+                int rating = Integer.parseInt(request.params(":num"));
                 Query query1 = session.createQuery("UPDATE Food SET rating = rating + :num WHERE name = :name")
-                        .setString("name", foodName)
+                        .setString("name", "Vegetable egg rolls")
                         .setInteger("num", rating);
 
                 query.executeUpdate();
@@ -140,7 +126,7 @@ public class CafeMacServer {
 
                 tx.commit();
                 response.status(200);
-                return "";
+                return response;
             }
         });
     }
