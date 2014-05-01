@@ -16,6 +16,7 @@ import java.util.*;
 @Entity
 public class Food {
     @Id
+    @Expose
     @GeneratedValue(generator="increment")
     @GenericGenerator(name="increment", strategy="increment")
     private Long foodId; //DB only
@@ -43,9 +44,6 @@ public class Food {
             inverseJoinColumns = { @JoinColumn(name = "STATION_ID",
                     nullable = false, updatable = false) })
     private Set<Station> stations; //DB Only
-
-    private int rating;
-    private int ratingCount;
 
     public Food(){}
     /* takes an HTML element representing a food and then
@@ -140,13 +138,5 @@ public class Food {
     @Override
     public int hashCode(){
         return name.hashCode();
-    }
-
-    public int getRating() {
-        return rating;
-    }
-
-    public int getRatingCount() {
-        return ratingCount;
     }
 }
