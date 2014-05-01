@@ -44,6 +44,9 @@ public class Food {
                     nullable = false, updatable = false) })
     private Set<Station> stations; //DB Only
 
+    private int rating;
+    private int ratingCount;
+
     public Food(){}
     /* takes an HTML element representing a food and then
        turns it into a useful java object.
@@ -137,5 +140,13 @@ public class Food {
     @Override
     public int hashCode(){
         return name.hashCode();
+    }
+
+    public int getRating() {
+        return rating;
+    }
+
+    public int getRatingCount() {
+        return ratingCount;
     }
 }

@@ -79,54 +79,104 @@ public class CafeMacServer {
 
                 Session session = sessionFactory.openSession();
 
-                Food test = (Food) session.createQuery("from Food where name = :name")
-                        .setString("name", "Vegetable egg rolls").iterate().next();
+                Food test = (Food) session.createQuery("FROM Food WHERE name = :name")
+                        .setString("name", "Criss cut fries").iterate().next();
 
                 Map<String,Object> responseBody = new HashMap<String, Object>();
+                Map<String, Integer> rating = new HashMap<String, Integer>();
+                rating.put("ratingCount", test.getRatingCount());
+                rating.put("rating", test.getRating());
+                responseBody.put(test.getName(), rating);
 
                 return gson.toJson(responseBody);
             }
         });
 
-        post(new Route("/v1/addReview/:review") {
+        post(new Route("/v1/addReview") {
             @Override
             public Object handle(Request request, Response response) {
-                Session session = sessionFactory.openSession();
-                Transaction tx = session.beginTransaction();
 
-                // Update database with reviews made by users
-                Query query = session.createQuery("UPDATE Food SET rating = :review WHERE name = :name")
-                        .setString("name", "Vegetable egg rolls")
-                        .setString("review", ":review");
-                query.executeUpdate();
+                Map<String,Object> responseBody = new HashMap<String, Object>();
 
-                tx.commit();
-                response.status(200);
-                return response;
+                if (request.body() != null) {
+                    Review review = gson.fromJson(request.body(), Review.class);
+                    Session session = sessionFactory.openSession();
+                    Transaction tx = session.beginTransaction();
+
+                    int foodID = 0;
+
+                    try {
+                        foodID = Integer.parseInt(request.queryParams("id"));
+                    } catch (NumberFormatException e) {
+                        return "Passed ID is null or not an integer";
+                    }
+
+                    // Update database with reviews made by users
+                    Query query = session.createQuery("FROM Food WHERE foodid = :id")
+                            .setInteger("id", foodID);
+
+                    // If food id is in database
+                    if (query != null) {
+                        Food dbFood = (Food) query.iterate().next();
+
+                        dbFood.getReviews().add(review);
+
+                        query.executeUpdate();
+                        tx.commit();
+
+                        responseBody.put("success", true);
+                        response.status(200);
+                        return responseBody;
+
+                    // If food id is not in database
+                    } else {
+                        responseBody.put("success", false);
+                        responseBody.put("Error", "Food does not exist in database");
+                        return responseBody;
+                    }
+
+                // If no request body was sent
+                }
+                responseBody.put("success", false);
+                responseBody.put("Error", "No request body was sent");
+                return responseBody;
             }
         });
 
-        post(new Route("/v1/rating/:num") {
+        post(new Route("/v1/incrementRating") {
             @Override
             public Object handle(Request request, Response response) {
-                Session session = sessionFactory.openSession();
-                Transaction tx = session.beginTransaction();
 
-                // Increment the rating for specific food item in database
-                Query query = session.createQuery("UPDATE Food SET ratingCount = ratingCount + 1 WHERE name = :name")
-                        .setString("name", "Vegetable egg rolls");
+                if (request.body() != null) {
+                    Session session = sessionFactory.openSession();
+                    Transaction tx = session.beginTransaction();
 
-                int rating = Integer.parseInt(request.params(":num"));
-                Query query1 = session.createQuery("UPDATE Food SET rating = rating + :num WHERE name = :name")
-                        .setString("name", "Vegetable egg rolls")
-                        .setInteger("num", rating);
+                    String foodName = "";
+                    int rating = 0;
 
-                query.executeUpdate();
-                query1.executeUpdate();
+                    try {
+                        foodName = request.queryParams("name");
+                        rating = Integer.parseInt(request.queryParams("rating"));
+                    } catch (NumberFormatException e) {
 
-                tx.commit();
-                response.status(200);
-                return response;
+                    }
+
+                    // Increment the rating for specific food item in database
+                    Query query = session.createQuery("UPDATE Food SET ratingCount = ratingCount + 1 WHERE name = :name")
+                            .setString("name", foodName);
+
+                    Query query1 = session.createQuery("UPDATE Food SET rating = rating + :num WHERE name = :name")
+                            .setString("name", foodName)
+                            .setInteger("num", rating);
+
+                    query.executeUpdate();
+                    query1.executeUpdate();
+
+                    tx.commit();
+                    response.status(200);
+                    return "";
+                }
+                return "";
             }
         });
     }

@@ -84,4 +84,5 @@ public class Review {
     public void setCreatedAt(Date date) {
         this.createdAt = createdAt;
     }
+
 }
