@@ -14,7 +14,7 @@
         <property name="hibernate.connection.password">hIK6uTRcIX-xMNSVZMZweXKLGK </property>
         <property name="hibernate.connection.url">jdbc:postgresql://ec2-50-16-201-126.compute-1.amazonaws.com:5432/d1f5vcb8rqtqob</property>
 
-        <property name="connection_pool_size">1</property>
+        <property name="connection_pool_size">10</property>
 
         <!--
 This flag automatically updates the database schema to match the currently mapped
