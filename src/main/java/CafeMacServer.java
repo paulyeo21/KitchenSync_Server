@@ -2,7 +2,6 @@ import static spark.Spark.*;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.sun.xml.internal.bind.v2.WellKnownNamespace;
 import org.hibernate.*;
 import org.hibernate.Session;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -72,25 +71,25 @@ public class CafeMacServer {
             }
         });
 
-        get(new Route("/v1/test") {
-            @Override
-            public Object handle(Request request, Response response) {
-                response.type("application/json");
-
-                Session session = sessionFactory.openSession();
-
-                Food test = (Food) session.createQuery("FROM Food WHERE name = :name")
-                        .setString("name", "Criss cut fries").iterate().next();
-
-                Map<String,Object> responseBody = new HashMap<String, Object>();
-                Map<String, Integer> rating = new HashMap<String, Integer>();
-                rating.put("ratingCount", test.getRatingCount());
-                rating.put("rating", test.getRating());
-                responseBody.put(test.getName(), rating);
-
-                return gson.toJson(responseBody);
-            }
-        });
+//        get(new Route("/v1/test") {
+//            @Override
+//            public Object handle(Request request, Response response) {
+//                response.type("application/json");
+//
+//                Session session = sessionFactory.openSession();
+//
+//                Food test = (Food) session.createQuery("FROM Food WHERE name = :name")
+//                        .setString("name", "Criss cut fries").iterate().next();
+//
+//                Map<String,Object> responseBody = new HashMap<String, Object>();
+//                Map<String, Integer> rating = new HashMap<String, Integer>();
+//                rating.put("ratingCount", test.getRatingCount());
+//                rating.put("rating", test.getRating());
+//                responseBody.put(test.getName(), rating);
+//
+//                return gson.toJson(responseBody);
+//            }
+//        });
 
         post(new Route("/v1/addReview") {
             @Override
