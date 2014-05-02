@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
+
 /**
  * Created by jeffrey on 4/19/14.
  */
@@ -31,6 +32,9 @@ public class Review {
 
     @Expose
     private int rating;
+
+
+    private int foodID;
 
     @Expose
     @NotNull
