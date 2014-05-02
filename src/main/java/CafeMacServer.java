@@ -6,12 +6,13 @@ import org.hibernate.*;
 import org.hibernate.Session;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
-import org.json.simple.JSONArray;
+import org.json.JSONObject;
 import spark.*;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.util.*;
+
 
 public class CafeMacServer {
 
@@ -101,17 +102,14 @@ public class CafeMacServer {
                 if (request.body() != null) {
                     Session session = sessionFactory.openSession();
                     Transaction tx = session.beginTransaction();
-
-                    int foodID = 0;
-
-                    try {
-                        foodID = Integer.parseInt(request.params("id"));
-                        String json = request.params("review");
-                        Review review = gson.fromJson(json, Review.class);
-
+                    try{
+                        JSONObject jsonArray = new JSONObject(request.body());
+                        long id = jsonArray.getLong("id");
+                        String reviewJson = jsonArray.getString("review");
+                        Review review = gson.fromJson(reviewJson, Review.class);
                         // Update database with reviews made by users
                         Query query = session.createQuery("FROM Food WHERE foodid = :id")
-                                .setInteger("id", foodID);
+                                .setLong("id", id);
 
                         // If food id is in database
                         if (query != null) {
@@ -144,7 +142,7 @@ public class CafeMacServer {
             }
         });
 
-        post(new Route("/v1/incrementRating") {
+ /*       post(new Route("/v1/incrementRating") {
             @Override
             public Object handle(Request request, Response response) {
 
@@ -179,7 +177,7 @@ public class CafeMacServer {
                 }
                 return "";
             }
-        });
+        });*/
     }
 
     public static Week reconstruct(){
