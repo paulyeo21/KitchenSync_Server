@@ -114,6 +114,7 @@ public class CafeMacServer {
                         // If food id is in database
                         if (dbFood != null) {
 
+                            review.setFood(dbFood);
                             dbFood.getReviews().add(review);
                             session.update(dbFood);
                             tx.commit();

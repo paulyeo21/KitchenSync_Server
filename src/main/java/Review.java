@@ -33,7 +33,6 @@ public class Review {
     @Expose
     private int rating;
 
-
     private int foodID;
 
     @Expose
