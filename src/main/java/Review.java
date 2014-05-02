@@ -24,7 +24,6 @@ public class Review {
     @JoinColumn(name = "FOOD_ID", nullable = false)
     private Food food; //DB only
 
-
     @Expose
     private String reviewer;
     @Expose
@@ -32,8 +31,6 @@ public class Review {
 
     @Expose
     private int rating;
-
-    private int foodID;
 
     @Expose
     @NotNull
