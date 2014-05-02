@@ -6,6 +6,7 @@ import org.hibernate.*;
 import org.hibernate.Session;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+import org.json.simple.JSONArray;
 import spark.*;
 
 import javax.validation.ConstraintViolation;
@@ -98,53 +99,48 @@ public class CafeMacServer {
                 Map<String,Object> responseBody = new HashMap<String, Object>();
 
                 if (request.body() != null) {
-                    return "-------> BODY";
-                }
+                    Session session = sessionFactory.openSession();
+                    Transaction tx = session.beginTransaction();
 
-//                if (request.body() != null) {
-//                    Session session = sessionFactory.openSession();
-//                    Transaction tx = session.beginTransaction();
-//
-//                    int foodID = 0;
-//
-//                    try {
-//                        foodID = Integer.parseInt(request.params("id"));
-//                        String json = request.params("review");
-//                        Review review = gson.fromJson(json, Review.class);
-//
-//                        // Update database with reviews made by users
-//                        Query query = session.createQuery("FROM Food WHERE foodid = :id")
-//                                .setInteger("id", foodID);
-//
-//                        // If food id is in database
-//                        if (query != null) {
-//                            Food dbFood = (Food) query.iterate().next();
-//
-//                            dbFood.getReviews().add(review);
-//
-//                            query.executeUpdate();
-//                            tx.commit();
-//
-//                            responseBody.put("success", true);
-//                            response.status(200);
-//                            return responseBody;
-//
-//                        // If food id is not in database
-//                        } else {
-//                            responseBody.put("success", false);
-//                            responseBody.put("Error", "Food does not exist in database");
-//                            return responseBody;
-//                        }
-//                    } catch (NumberFormatException e) {
-//                        return "Passed ID is null or not an integer";
-//                    }
-//
-//                // If no request body was sent
-//                }
-//                responseBody.put("success", false);
-//                responseBody.put("Error", "No request body was sent");
-//                return responseBody;
-                return "";
+                    int foodID = 0;
+
+                    try {
+                        foodID = Integer.parseInt(request.params("id"));
+                        String json = request.params("review");
+                        Review review = gson.fromJson(json, Review.class);
+
+                        // Update database with reviews made by users
+                        Query query = session.createQuery("FROM Food WHERE foodid = :id")
+                                .setInteger("id", foodID);
+
+                        // If food id is in database
+                        if (query != null) {
+                            Food dbFood = (Food) query.iterate().next();
+
+                            dbFood.getReviews().add(review);
+
+                            query.executeUpdate();
+                            tx.commit();
+
+                            responseBody.put("success", true);
+                            response.status(200);
+                            return responseBody;
+
+                        // If food id is not in database
+                        } else {
+                            responseBody.put("success", false);
+                            responseBody.put("Error", "Food does not exist in database");
+                            return responseBody;
+                        }
+                    } catch (NumberFormatException e) {
+                        return "Passed ID is null or not an integer";
+                    }
+
+                // If no request body was sent
+                }
+                responseBody.put("success", false);
+                responseBody.put("Error", "No request body was sent");
+                return responseBody;
             }
         });
 
