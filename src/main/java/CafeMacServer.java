@@ -108,16 +108,14 @@ public class CafeMacServer {
                         String reviewJson = jsonArray.getString("review");
                         Review review = gson.fromJson(reviewJson, Review.class);
                         // Update database with reviews made by users
-                        Query query = session.createQuery("FROM Food WHERE foodid = :id")
-                                .setLong("id", id);
+                        Food dbFood = (Food) session.createQuery("FROM Food WHERE foodid = :id")
+                                .setLong("id", id).iterate().next();
 
                         // If food id is in database
-                        if (query != null) {
-                            Food dbFood = (Food) query.iterate().next();
+                        if (dbFood != null) {
 
                             dbFood.getReviews().add(review);
-
-                            query.executeUpdate();
+                            session.save(dbFood);
                             tx.commit();
 
                             responseBody.put("success", true);
