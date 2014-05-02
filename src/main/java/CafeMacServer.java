@@ -115,7 +115,7 @@ public class CafeMacServer {
                         if (dbFood != null) {
 
                             dbFood.getReviews().add(review);
-                            session.save(dbFood);
+                            session.update(dbFood);
                             tx.commit();
 
                             responseBody.put("success", true);
