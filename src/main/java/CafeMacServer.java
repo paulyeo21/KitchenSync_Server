@@ -111,7 +111,7 @@ public class CafeMacServer {
                         // Check if review text already exists
                         String reviewText = review.getText();
                         Review dbReview = (Review) session.createQuery("FROM Review WHERE text = :reviewText")
-                                    .setString("reviewText", reviewText);
+                                    .setString("reviewText", reviewText).iterate().next();
 
                         // Update database with reviews made by users
                         Food dbFood = (Food) session.createQuery("FROM Food WHERE foodid = :id")
