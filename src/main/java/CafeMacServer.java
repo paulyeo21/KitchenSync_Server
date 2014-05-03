@@ -109,40 +109,33 @@ public class CafeMacServer {
                         Review review = gson.fromJson(reviewJson, Review.class);
 
                         // Check if review text already exists
-                        String reviewText = review.getText();
-
-                        Review dbReview = null;
-
                         try {
-                            dbReview = (Review) session.createQuery("FROM Review WHERE text = :reviewText")
+                            String reviewText = review.getText();
+                            Review dbReview = (Review) session.createQuery("FROM Review WHERE text = :reviewText")
                                         .setString("reviewText", reviewText).iterate().next();
                         } catch (NoSuchElementException e) {
-                            // Review text does not exist
-                        }
+                            // Update database with reviews made by users
+                            Food dbFood = (Food) session.createQuery("FROM Food WHERE foodid = :id")
+                                    .setLong("id", id).iterate().next();
 
-                        System.out.println("----->" + dbReview);
+                            // If food id is in database
+                            if (dbFood != null) {
 
-                        // Update database with reviews made by users
-                        Food dbFood = (Food) session.createQuery("FROM Food WHERE foodid = :id")
-                                .setLong("id", id).iterate().next();
+                                review.setFood(dbFood);
+                                dbFood.getReviews().add(review);
+                                session.update(dbFood);
+                                tx.commit();
 
-                        // If food id is in database
-                        if (dbFood != null && dbReview != null) {
+                                responseBody.put("success", true);
+                                response.status(200);
+                                return responseBody;
 
-                            review.setFood(dbFood);
-                            dbFood.getReviews().add(review);
-                            session.update(dbFood);
-                            tx.commit();
-
-                            responseBody.put("success", true);
-                            response.status(200);
-                            return responseBody;
-
-                        // If food id is not in database
-                        } else {
-                            responseBody.put("success", false);
-                            responseBody.put("Error", "Food does not exist in database");
-                            return responseBody;
+                                // If food id is not in database
+                            } else {
+                                responseBody.put("success", false);
+                                responseBody.put("Error", "Food does not exist in database");
+                                return responseBody;
+                            }
                         }
                     } catch (NumberFormatException e) {
                         return "Passed ID is null or not an integer";
