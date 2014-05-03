@@ -107,12 +107,18 @@ public class CafeMacServer {
                         long id = jsonArray.getLong("id");
                         String reviewJson = jsonArray.getString("review");
                         Review review = gson.fromJson(reviewJson, Review.class);
+
+                        // Check if review text already exists
+                        String reviewText = review.getText();
+                        Review dbReview = (Review) session.createQuery("FROM Review WHERE text = :reviewText")
+                                    .setString("reviewText", reviewText);
+
                         // Update database with reviews made by users
                         Food dbFood = (Food) session.createQuery("FROM Food WHERE foodid = :id")
                                 .setLong("id", id).iterate().next();
 
                         // If food id is in database
-                        if (dbFood != null) {
+                        if (dbFood != null && dbReview != null) {
 
                             review.setFood(dbFood);
                             dbFood.getReviews().add(review);
