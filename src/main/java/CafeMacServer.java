@@ -28,15 +28,17 @@ public class CafeMacServer {
         get(new Route("/v1/menu") {
             @Override
             public Object handle(Request request, Response response) {
-
+                Week week = null;
+                boolean success = false;
+                String error = "";
+                Map<String,String> validationErrors = new HashMap<String, String>();
                 try {
-                    Week week = reconstruct();
+                    week = reconstruct();
                     response.type("application/json");
-                    if (week != null) {
-                        return gson.toJson(week);
-                    }
-                    return "";
 
+                    if (week != null) {
+                        success = true;
+                    }
                 } catch (ConstraintViolationException e) {
 
                     // From P. Cantrell Jokes Server
@@ -44,32 +46,28 @@ public class CafeMacServer {
                     // HTTP codes in the 4xx range mean that the client submitted a bad request.
                     // 400 is a good one for validation errors.
                     response.status(400);
-
-                    Map<String,Object> responseBody = new HashMap<String, Object>();
-                    responseBody.put("success", false);
-                    responseBody.put("error", e.getLocalizedMessage());
+                    success = false;
+                    error = e.getLocalizedMessage();
 
                     // Give the client field-by-field user-readable error messages
-                    Map<String,String> errors = new HashMap<String, String>();
                     for(ConstraintViolation<?> violation : e.getConstraintViolations()) {
-                        errors.put(violation.getPropertyPath().toString(), violation.getMessage());
+                        validationErrors.put(violation.getPropertyPath().toString(), violation.getMessage());
                     }
-                    responseBody.put("validationErrors", errors);
-                    return gson.toJson(responseBody);
 
                 } catch (Exception e) {
 
                     // HTTP codes in the 5xx range mean that something went wrong on the server,
                     // and it's not necessarily the client's fault.
                     response.status(500);
-
-                    Map<String,Object> responseBody = new HashMap<String, Object>();
-                    responseBody.put("success", false);
-                    responseBody.put("error", e.getLocalizedMessage());
-                    responseBody.put("For more information", "http://macalester.cafebonappetit.com/" +
-                            "hungry/cafe-mac/");
-                    return gson.toJson(responseBody);
+                    success = false;
+                    error= e.getLocalizedMessage();
                 }
+                Map<String, Object> responseBody = new HashMap<String, Object>();
+                responseBody.put("success", success);
+                responseBody.put("error", error);
+                responseBody.put("week", week);
+                responseBody.put("validation errors", validationErrors);
+                return gson.toJson(responseBody);
             }
         });
 
@@ -139,6 +137,8 @@ public class CafeMacServer {
                         }
                     } catch (NumberFormatException e) {
                         return "Passed ID is null or not an integer";
+                    } finally {
+                        session.close();
                     }
 
                 // If no request body was sent
@@ -194,8 +194,8 @@ public class CafeMacServer {
             calendar.add(Calendar.DATE, 1);
             Date date = calendar.getTime();
             Day day = new Day();
+            Session session = sessionFactory.openSession();
             try {
-                Session session = sessionFactory.openSession();
                 Query query = session.createQuery("FROM Meal WHERE date = :date")
                         .setDate("date", date);
                 List<Meal> meals = query.list();
@@ -204,6 +204,8 @@ public class CafeMacServer {
                 session.close();
             } catch (NoSuchElementException e) {
                 return null;
+            } finally {
+                session.close();
             }
             week.setDay(day, Weekday.values()[i]);
         }

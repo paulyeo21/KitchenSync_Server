@@ -1,22 +1,15 @@
-import com.google.gson.JsonObject;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
-import org.json.simple.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Set;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 /**
  * Created by paulyeo on 4/4/14.
@@ -25,7 +18,6 @@ public class CafeMacParser {
 
     private static final String CAFE_MAC_URL = "http://macalester.cafebonappetit.com/hungry/cafe-mac";
     private static SessionFactory sessionFactory = createSessionFactory();
-    private static Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 
     public Week parse(String url) {
         Document doc = null;
@@ -60,6 +52,7 @@ public class CafeMacParser {
                 session.save(meal);
             }
             tx.commit();
+            session.close();
         }
     }
 
