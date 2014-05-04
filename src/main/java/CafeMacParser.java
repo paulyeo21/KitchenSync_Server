@@ -51,6 +51,7 @@ public class CafeMacParser {
             for (Meal meal : week.getMeals()) {
                 session.save(meal);
             }
+            session.close();
             tx.commit();
             session.close();
         }
