@@ -201,7 +201,6 @@ public class CafeMacServer {
                 List<Meal> meals = query.list();
                 for (Meal meal : meals)
                     day.setMeal(meal, meal.getMealType());
-                session.close();
             } catch (NoSuchElementException e) {
                 return null;
             } finally {
