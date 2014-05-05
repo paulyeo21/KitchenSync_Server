@@ -6,6 +6,7 @@ import org.hibernate.*;
 import org.hibernate.Session;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+import org.json.JSONException;
 import org.json.JSONObject;
 import spark.*;
 
@@ -97,71 +98,58 @@ public class CafeMacServer {
 
                 Map<String,Object> responseBody = new HashMap<String, Object>();
                 String error = "";
-                boolean success;
+                boolean success = false;
 
                 if (request.body() != null) {
                     Session session = sessionFactory.openSession();
                     Transaction tx = session.beginTransaction();
-                    try{
+                    try {
                         JSONObject jsonArray = new JSONObject(request.body());
                         long id = jsonArray.getLong("id");
                         String reviewJson = jsonArray.getString("review");
                         Review review = gson.fromJson(reviewJson, Review.class);
 
                         // Check if review text already exists
-                        try {
+                        Food dbFood = (Food) session.createQuery("FROM Food WHERE foodId = :id")
+                                .setLong("id", id).iterate().next();
+                        if (dbFood != null) {
                             String reviewText = review.getText();
-                            if (reviewText.equals("")){
-                                Food dbFood = (Food) session.createQuery("FROM Food WHERE foodId = :id")
-                                        .setLong("id", id).iterate().next();
-
-                                // If food id is in database
-                                if (dbFood != null) {
-                                    review.setFood(dbFood);
-                                    dbFood.getReviews().add(review);
-                                    session.update(dbFood);
-                                    tx.commit();
-                                    success = true;
-                                    response.status(200);
-                                    // If food id is not in database
-                                } else {
-                                    success = false;
-                                    error = "Food not in database";
-                                }
-                            } else {
-                                Review dbReview = (Review) session.createQuery("FROM Review WHERE text = :reviewText")
-                                        .setString("reviewText", reviewText).iterate().next();
-                            }
-                        } catch (NoSuchElementException e) {
-                            // Update database with reviews made by users
-                            Food dbFood = (Food) session.createQuery("FROM Food WHERE foodId = :id")
-                                    .setLong("id", id).iterate().next();
-
-                            // If food id is in database
-                            if (dbFood != null) {
-
+                            if (reviewText.equals("")) {
                                 review.setFood(dbFood);
                                 dbFood.getReviews().add(review);
                                 session.update(dbFood);
                                 tx.commit();
                                 success = true;
                                 response.status(200);
-                            // If food id is not in database
                             } else {
-                                success = false;
-                                error = "Food not in database";
+                                Review dbReview = (Review) session.createQuery("FROM Review WHERE text = :reviewText")
+                                        .setString("reviewText", reviewText).iterate().next();
+                                if (dbReview != null) {
+                                    review.setFood(dbFood);
+                                    dbFood.getReviews().add(review);
+                                    session.update(dbFood);
+                                    tx.commit();
+                                    success = true;
+                                    response.status(200);
+                                } else {
+                                    success = false;
+                                    error = "Duplicate Review";
+                                }
                             }
+                        } else {
+                            success = false;
+                            error = "Food not in database";
                         }
-                    } catch (NumberFormatException e) {
+                    } catch (JSONException e) {
                         success = false;
-                        error = "Passed ID is null or not an integer";
+                        error = "Malformed body";
                     } finally {
                         session.close();
                     }
-                // If no request body was sent
+                    // If no request body was sent
                 }
-                responseBody.put("success", false);
-                responseBody.put("Error", "No request body was sent");
+                responseBody.put("success", success);
+                responseBody.put("error", error);
                 return responseBody;
             }
         });
