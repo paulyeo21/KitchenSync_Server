@@ -96,6 +96,8 @@ public class CafeMacServer {
             public Object handle(Request request, Response response) {
 
                 Map<String,Object> responseBody = new HashMap<String, Object>();
+                String error = "";
+                boolean success;
 
                 if (request.body() != null) {
                     Session session = sessionFactory.openSession();
@@ -109,11 +111,30 @@ public class CafeMacServer {
                         // Check if review text already exists
                         try {
                             String reviewText = review.getText();
-                            Review dbReview = (Review) session.createQuery("FROM Review WHERE text = :reviewText")
+                            if (reviewText.equals("")){
+                                Food dbFood = (Food) session.createQuery("FROM Food WHERE foodId = :id")
+                                        .setLong("id", id).iterate().next();
+
+                                // If food id is in database
+                                if (dbFood != null) {
+                                    review.setFood(dbFood);
+                                    dbFood.getReviews().add(review);
+                                    session.update(dbFood);
+                                    tx.commit();
+                                    success = true;
+                                    response.status(200);
+                                    // If food id is not in database
+                                } else {
+                                    success = false;
+                                    error = "Food not in database";
+                                }
+                            } else {
+                                Review dbReview = (Review) session.createQuery("FROM Review WHERE text = :reviewText")
                                         .setString("reviewText", reviewText).iterate().next();
+                            }
                         } catch (NoSuchElementException e) {
                             // Update database with reviews made by users
-                            Food dbFood = (Food) session.createQuery("FROM Food WHERE foodid = :id")
+                            Food dbFood = (Food) session.createQuery("FROM Food WHERE foodId = :id")
                                     .setLong("id", id).iterate().next();
 
                             // If food id is in database
@@ -123,24 +144,20 @@ public class CafeMacServer {
                                 dbFood.getReviews().add(review);
                                 session.update(dbFood);
                                 tx.commit();
-
-                                responseBody.put("success", true);
+                                success = true;
                                 response.status(200);
-                                return responseBody;
-
-                                // If food id is not in database
+                            // If food id is not in database
                             } else {
-                                responseBody.put("success", false);
-                                responseBody.put("Error", "Food does not exist in database");
-                                return responseBody;
+                                success = false;
+                                error = "Food not in database";
                             }
                         }
                     } catch (NumberFormatException e) {
-                        return "Passed ID is null or not an integer";
+                        success = false;
+                        error = "Passed ID is null or not an integer";
                     } finally {
                         session.close();
                     }
-
                 // If no request body was sent
                 }
                 responseBody.put("success", false);
