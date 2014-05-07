@@ -100,52 +100,61 @@ public class CafeMacServer {
                 String error = "";
                 boolean success = false;
 
-                if (request.body() != null) {
+                // Check whether the post request sent any information
+//                if (request.body() != null) {
                     Session session = sessionFactory.openSession();
                     Transaction tx = session.beginTransaction();
                     try {
                         JSONObject jsonArray = new JSONObject(request.body());
+                        // Request parameters "id" and "review"
                         long id = jsonArray.getLong("id");
                         String reviewJson = jsonArray.getString("review");
                         Review review = gson.fromJson(reviewJson, Review.class);
 
-                        // Check if review text already exists
+                        // Check if food_id of review already exists
                         Food dbFood = (Food) session.createQuery("FROM Food WHERE foodId = :id")
                                 .setLong("id", id).iterate().next();
-                        if (dbFood != null) {
-                            String reviewText = review.getText();
-                            if (reviewText.equals("")) {
+
+                        String reviewText = review.getText();
+
+                        // Check if review text is empty
+                        if (reviewText.equals("")) {
+                            review.setFood(dbFood);
+                            dbFood.getReviews().add(review);
+                            session.update(dbFood);
+                            tx.commit();
+                            success = true;
+                            response.status(200);
+
+                        // If review text is not empty, check if review text is a duplicate
+                        } else {
+                            try {
+                                Review dbReview = (Review) session.createQuery("FROM Review WHERE text = :reviewText")
+                                        .setString("reviewText", reviewText).iterate().next();
+                                success = false;
+                                error = "Duplicate Review";
+
+                            // If review text is not a duplicate
+                            } catch (NoSuchElementException e) {
                                 review.setFood(dbFood);
                                 dbFood.getReviews().add(review);
                                 session.update(dbFood);
                                 tx.commit();
                                 success = true;
                                 response.status(200);
-                            } else {
-                                Review dbReview = (Review) session.createQuery("FROM Review WHERE text = :reviewText")
-                                        .setString("reviewText", reviewText).iterate().next();
-                                if (dbReview != null) {
-                                    review.setFood(dbFood);
-                                    dbFood.getReviews().add(review);
-                                    session.update(dbFood);
-                                    tx.commit();
-                                    success = true;
-                                    response.status(200);
-                                } else {
-                                    success = false;
-                                    error = "Duplicate Review";
-                                }
                             }
-                        } else {
-                            success = false;
-                            error = "Food not in database";
                         }
                     } catch (JSONException e) {
                         success = false;
                         error = "Malformed body";
+
+                    // Catch exception if food does not exist from query on line 115
+                    } catch (NoSuchElementException e) {
+                        success = false;
+                        error = "Food does not exist in database";
                     } finally {
                         session.close();
-                    }
+//                    }
                     // If no request body was sent
                 }
                 responseBody.put("success", success);
