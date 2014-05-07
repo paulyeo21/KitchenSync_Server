@@ -77,7 +77,7 @@ public class CafeMacServer {
             public Object handle(Request request, Response response) {
 
                 Map<String,Object> responseBody = new HashMap<String, Object>();
-                String error = "";
+                String error = "sucess";
                 boolean success = false;
 
                 Session session = sessionFactory.openSession();
@@ -107,6 +107,10 @@ public class CafeMacServer {
                     // If review text is not empty
                     } else {
                         try {
+                            System.out.println("---->" + review.getId());
+                            System.out.println("---->" + review.getReviewer());
+                            System.out.println("---->" + review.getText());
+
                             // Check if review text, reviewer, and food id already exists
                             Review dbReview = (Review) session.createQuery("FROM Review WHERE text = :reviewText AND reviewer = :reviewer AND food_id = :id")
                                     .setString("reviewText", reviewText)
