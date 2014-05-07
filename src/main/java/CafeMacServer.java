@@ -72,26 +72,6 @@ public class CafeMacServer {
             }
         });
 
-//        get(new Route("/v1/test") {
-//            @Override
-//            public Object handle(Request request, Response response) {
-//                response.type("application/json");
-//
-//                Session session = sessionFactory.openSession();
-//
-//                Food test = (Food) session.createQuery("FROM Food WHERE name = :name")
-//                        .setString("name", "Criss cut fries").iterate().next();
-//
-//                Map<String,Object> responseBody = new HashMap<String, Object>();
-//                Map<String, Integer> rating = new HashMap<String, Integer>();
-//                rating.put("ratingCount", test.getRatingCount());
-//                rating.put("rating", test.getRating());
-//                responseBody.put(test.getName(), rating);
-//
-//                return gson.toJson(responseBody);
-//            }
-//        });
-
         post(new Route("/v1/addReview") {
             @Override
             public Object handle(Request request, Response response) {
@@ -100,105 +80,67 @@ public class CafeMacServer {
                 String error = "";
                 boolean success = false;
 
-                // Check whether the post request sent any information
-//                if (request.body() != null) {
-                    Session session = sessionFactory.openSession();
-                    Transaction tx = session.beginTransaction();
-                    try {
-                        JSONObject jsonArray = new JSONObject(request.body());
-                        // Request parameters "id" and "review"
-                        long id = jsonArray.getLong("id");
-                        String reviewJson = jsonArray.getString("review");
-                        Review review = gson.fromJson(reviewJson, Review.class);
+                Session session = sessionFactory.openSession();
+                Transaction tx = session.beginTransaction();
+                try {
+                    JSONObject jsonArray = new JSONObject(request.body());
+                    // Request parameters "id" and "review"
+                    long id = jsonArray.getLong("id");
+                    String reviewJson = jsonArray.getString("review");
+                    Review review = gson.fromJson(reviewJson, Review.class);
 
-                        // Check if food_id of review already exists
-                        Food dbFood = (Food) session.createQuery("FROM Food WHERE foodId = :id")
-                                .setLong("id", id).iterate().next();
+                    // Check if food_id of review already exists
+                    Food dbFood = (Food) session.createQuery("FROM Food WHERE foodId = :id")
+                            .setLong("id", id).iterate().next();
 
-                        String reviewText = review.getText();
+                    String reviewText = review.getText();
 
-                        // Check if review text is empty
-                        if (reviewText.equals("")) {
+                    // Check if review text is empty
+                    if (reviewText.equals("")) {
+                        review.setFood(dbFood);
+                        dbFood.getReviews().add(review);
+                        session.update(dbFood);
+                        tx.commit();
+                        success = true;
+                        response.status(200);
+
+                    // If review text is not empty, check if review text is a duplicate
+                    } else {
+                        try {
+                            Review dbReview = (Review) session.createQuery("FROM Review WHERE text = :reviewText")
+                                    .setString("reviewText", reviewText).iterate().next();
+                            success = false;
+                            error = "Duplicate Review";
+
+                        // If review text is not a duplicate
+                        } catch (NoSuchElementException e) {
                             review.setFood(dbFood);
                             dbFood.getReviews().add(review);
                             session.update(dbFood);
                             tx.commit();
                             success = true;
                             response.status(200);
-
-                        // If review text is not empty, check if review text is a duplicate
-                        } else {
-                            try {
-                                Review dbReview = (Review) session.createQuery("FROM Review WHERE text = :reviewText")
-                                        .setString("reviewText", reviewText).iterate().next();
-                                success = false;
-                                error = "Duplicate Review";
-
-                            // If review text is not a duplicate
-                            } catch (NoSuchElementException e) {
-                                review.setFood(dbFood);
-                                dbFood.getReviews().add(review);
-                                session.update(dbFood);
-                                tx.commit();
-                                success = true;
-                                response.status(200);
-                            }
                         }
-                    } catch (JSONException e) {
-                        success = false;
-                        error = "Malformed body";
+                    }
 
-                    // Catch exception if food does not exist from query on line 115
-                    } catch (NoSuchElementException e) {
-                        success = false;
-                        error = "Food does not exist in database";
-                    } finally {
-                        session.close();
-//                    }
-                    // If no request body was sent
+                // Catch if the sent request body is malformed
+                } catch (JSONException e) {
+                    success = false;
+                    error = "Malformed body";
+
+                // Catch exception if food does not exist from query on line 115
+                } catch (NoSuchElementException e) {
+                    success = false;
+                    error = "Food does not exist in database";
+                } finally {
+                    session.close();
                 }
+
                 responseBody.put("success", success);
                 responseBody.put("error", error);
                 return responseBody;
             }
         });
-
- /*       post(new Route("/v1/incrementRating") {
-            @Override
-            public Object handle(Request request, Response response) {
-
-                if (request.body() != null) {
-                    Session session = sessionFactory.openSession();
-                    Transaction tx = session.beginTransaction();
-
-                    String foodName = "";
-                    int rating = 0;
-
-                    try {
-                        foodName = request.queryParams("name");
-                        rating = Integer.parseInt(request.queryParams("rating"));
-                    } catch (NumberFormatException e) {
-
-                    }
-
-                    // Increment the rating for specific food item in database
-                    Query query = session.createQuery("UPDATE Food SET ratingCount = ratingCount + 1 WHERE name = :name")
-                            .setString("name", foodName);
-
-                    Query query1 = session.createQuery("UPDATE Food SET rating = rating + :num WHERE name = :name")
-                            .setString("name", foodName)
-                            .setInteger("num", rating);
-
-                    query.executeUpdate();
-                    query1.executeUpdate();
-
-                    tx.commit();
-                    response.status(200);
-                    return "";
-                }
-                return "";
-            }
-        });*/
     }
 
     public static Week reconstruct(){

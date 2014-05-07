@@ -11,9 +11,6 @@ import java.util.List;
 import java.util.Set;
 
 
-/**
- * Created by paulyeo on 4/4/14.
- */
 public class CafeMacParser {
 
     private static final String CAFE_MAC_URL = "http://macalester.cafebonappetit.com/hungry/cafe-mac";
