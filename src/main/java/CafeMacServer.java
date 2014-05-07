@@ -115,7 +115,7 @@ public class CafeMacServer {
                             Review dbReview = (Review) session.createQuery("FROM Review WHERE text = :reviewText AND reviewer = :reviewer AND food_id = :id")
                                     .setString("reviewText", reviewText)
                                     .setString("reviewer", review.getReviewer())
-                                    .setLong("id", review.getId()).iterate().next();
+                                    .setLong("id", id).iterate().next();
                             success = false;
                             error = "Duplicate Review";
 
