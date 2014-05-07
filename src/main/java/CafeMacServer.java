@@ -104,11 +104,14 @@ public class CafeMacServer {
                         success = true;
                         response.status(200);
 
-                    // If review text is not empty, check if review text is a duplicate
+                    // If review text is not empty
                     } else {
                         try {
-                            Review dbReview = (Review) session.createQuery("FROM Review WHERE text = :reviewText")
-                                    .setString("reviewText", reviewText).iterate().next();
+                            // Check if review text, reviewer, and food id already exists
+                            Review dbReview = (Review) session.createQuery("FROM Review WHERE text = :reviewText AND reviewer = :reviewer AND food_id = :id")
+                                    .setString("reviewText", reviewText)
+                                    .setString("reviewer", review.getReviewer())
+                                    .setLong("id", review.getId()).iterate().next();
                             success = false;
                             error = "Duplicate Review";
 
