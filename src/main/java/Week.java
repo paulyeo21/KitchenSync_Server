@@ -90,6 +90,10 @@ public class Week {
         return calendar;
     }
 
+    // The methods clean, getStrippedFoods, and mergeFoods help pass reviews and ratings from
+    // old foods in DB to same foods that appear in future meals.
+
+    // This method checks to see if all food items in the week object are unique.
     public void clean(){
         List<Food> foods = new ArrayList<Food>();
         List<Food> oldFoods = new ArrayList<Food>();
@@ -127,6 +131,8 @@ public class Week {
                     oldFoods.addAll(station.getFoods());
         return oldFoods;
     }
+
+    // This method strips the stations relations with the "old" food in the database
     public Set<Food> getStrippedFoods(){
         Set<Food> oldFoods = new HashSet<Food>();
         for(Day day : days)
@@ -138,6 +144,9 @@ public class Week {
                     }
         return oldFoods;
     }
+
+    // MergeFoods method gets the food items from the new meal and passes
+    // the reviews and ratings and station relations to the existing "old" food in the database.
     public Set<Food> mergeFoods(Set<Food> oldFoods){
         if (oldFoods.size() == 0)
             return oldFoods;

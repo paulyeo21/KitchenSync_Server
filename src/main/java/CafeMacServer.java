@@ -107,10 +107,6 @@ public class CafeMacServer {
                     // If review text is not empty
                     } else {
                         try {
-                            System.out.println("----> id: " + review.getId());
-                            System.out.println("----> reviewer: " + review.getReviewer());
-                            System.out.println("----> text: " + review.getText());
-
                             // Check if review text, reviewer, and food id already exists
                             Review dbReview = (Review) session.createQuery("FROM Review WHERE text = :reviewText AND reviewer = :reviewer AND food_id = :id")
                                     .setString("reviewText", reviewText)
@@ -150,6 +146,7 @@ public class CafeMacServer {
         });
     }
 
+
     public static Week reconstruct(){
         Calendar calendar = Week.getNormalizedCalendar();
         Week week = new Week();
@@ -159,6 +156,7 @@ public class CafeMacServer {
             Day day = new Day();
             Session session = sessionFactory.openSession();
             try {
+                // Find meal of current date
                 Query query = session.createQuery("FROM Meal WHERE date = :date")
                         .setDate("date", date);
                 List<Meal> meals = query.list();
