@@ -1,5 +1,5 @@
 #KitchenSync Server
-Spring Macalester 2014. COMP 225. This repository holds the server-side code for our android mobile application KitchenSync.
+Spring Macalester 2014. COMP 225. This repository holds the server-side code for our android mobile application KitchenSync. The app code is located at http://github.com/NaOHman/KitchenSync
 ##Dependencies
 Spark, Maven, Hibernate, JSon, JSOup, Postgress, Heroku
 ##Architecture
