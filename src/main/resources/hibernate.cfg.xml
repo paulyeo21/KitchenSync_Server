@@ -10,7 +10,7 @@
         <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
         <!--<property name="hibernate.connection.username">paulyeo</property>-->
         <!--<property name="hibernate.connection.url">jdbc:postgresql:kitchensync</property>-->
-       
+
         <property name="connection_pool_size">10</property>
 
         <!--
