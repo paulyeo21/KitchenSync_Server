@@ -7,4 +7,4 @@ Our server is hosted by heroku. We've scheduled an hourly job that launches the 
 
 The CafeMacServer class provides the interface that our app connects with. It has a get method which returns a json object version of our week's menu. It also has a Post method which allows the app to post reviews to the database. **Do not change the model classes without making corresponding changes to the app**
 ##Testing
-We tested different cases such as a blank url or a completely different url with a different template and so on to test our server. We also did many trial and errors on the localhost trying different queries to ensure that our server would not break. 
+We tested different cases such as a blank url or a completely different url with a different template and so on to test our server. We also did many trial and errors on the localhost trying different queries to ensure that our database works fine which keeps our server from breaking. 
