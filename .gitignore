@@ -3,4 +3,4 @@
 *.iws
 log/
 target/
-.DS_Store
+*.DS_Store
