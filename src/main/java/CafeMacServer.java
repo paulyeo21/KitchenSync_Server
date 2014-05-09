@@ -146,7 +146,8 @@ public class CafeMacServer {
         });
     }
 
-
+    // Find the meal that corresponds to recent date and return as a week object.
+    // This is our way of assembling the parts from our database.
     public static Week reconstruct(){
         Calendar calendar = Week.getNormalizedCalendar();
         Week week = new Week();
